@@ -1,4 +1,4 @@
-.App {
+/*.App {
   text-align: center;
 }
 
@@ -35,4 +35,33 @@
   to {
     transform: rotate(360deg);
   }
+}
+*/
+
+.calendar {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+.month-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.days-grid {
+  display: grid;
+  width: 100%;
+  padding: 50px;
+  margin: 0 auto;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.day {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+.calendarInput{
+  width: 100%;
 }

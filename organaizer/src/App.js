@@ -26,6 +26,7 @@ function App() {
 <Organizer/>*/}
   const [currentDate, setCurrentDate] = useState(new Date());
   const [tasks, setTasks] = useState({});
+  const [selectedDay, setSelectedDay] = useState(null);
 
   const daysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -38,29 +39,62 @@ function App() {
   const handleNextMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
   };
+  const addTask = (day, task) => {
+    const key = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day}`;
+    setTasks(prevTasks => {
+      return {
+        ...prevTasks,
+        [key]: [...(prevTasks[key] || []), task]
+      };
+    });
+  };
+  const deleteTask = (day, index) => {
+    const key = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day}`;
+    setTasks(prevTasks => {
+      return {
+        ...prevTasks,
+        [key]: prevTasks[key].filter((_, i) => i !== index)
+      };
+    });
+  };
 
   return (
-    <div>
-      <div>
-        <button onClick={handlePrevMonth}>Previous Month</button>
-        <h2>{currentDate.toLocaleString('default', { month: 'long' })} {currentDate.getFullYear()}</h2>
-        <button onClick={handleNextMonth}>Next Month</button>
-      </div>
-      <div>
-        {[...Array(daysInMonth(currentDate)).keys()].map(day => (
-          <div key={day}>
-            <h3>{day + 1}</h3>
-            {tasks[day + 1] && tasks[day + 1].map((task, index) => (
-              <div key={index}>
-                <span>{task}</span>
-               
-              </div>
-            ))}
-            <input type="text" placeholder="Add a task" />
-          </div>
-        ))}
-      </div>
+    <div className="calendar">
+    <div className="month-header">
+      <button onClick={handlePrevMonth}>Назад</button>
+      <h2>{currentDate.toLocaleString('default', { month: 'long' })} {currentDate.getFullYear()}</h2>
+      <button onClick={handleNextMonth}>Вперед</button>
     </div>
+    <div className="days-grid">
+      {[...Array(daysInMonth(currentDate)).keys()].map(day => (
+        <div key={day} className="day" onClick={() => setSelectedDay(day + 1)}>
+          <h3>{day + 1}</h3>
+          {selectedDay === day + 1 &&
+            <input
+              className="calendarInput"
+              type="text"
+              placeholder="Добавить задачу"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  addTask(day + 1, e.target.value);
+                  e.target.value = '';
+                }
+              }}
+            />
+          }
+          {tasks[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day + 1}`] && tasks[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day + 1}`].map((task, index) => (
+            <div key={index}>
+              <span>{task}</span>
+              <button onClick={() => deleteTask(day + 1, index)}>Удалить</button>
+            </div>
+          ))}
+        </div>
+      ))}
+     
+    </div>
+  </div>
+
+
   );
 }
 
