@@ -1,0 +1,50 @@
+version: '3.9'
+
+
+services:
+  frontend:
+    build:
+      context: organaizer
+      target: development
+    image: supercalendar/frontend
+    container_name: SuperCalendarFrontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./organaizer/src:/code/src:ro
+    networks:
+      - client-side
+    environment:
+      - API_PATH=http://backend:8080/
+
+  backend:
+    build: backend
+    image: supercalendar/backend
+    container_name: SuperCalendarBackend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SQLALCHEMY_DATABASE_URL=postgresql://postgres:example@db/calendar
+    networks:
+      - client-side
+      - server-side
+
+  db:
+    image: postgres
+    container_name: SuperCalendarDB
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: calendar
+    networks:
+      - server-side
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+
+networks:
+  client-side: { }
+  server-side: { }
