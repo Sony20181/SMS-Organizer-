@@ -1,5 +1,5 @@
 /*.App {
-  text-align: center;
+  background-color: "#fcdfbd";
 }
 
 .App-logo {
@@ -36,32 +36,63 @@
     transform: rotate(360deg);
   }
 }
-*/
 
+*/
 .calendar {
   display: flex;
-  flex-wrap: wrap;
-  margin: 0 auto;
+  flex-direction: column;
+  align-items: center;
 }
 
 .month-header {
-  width: 100%;
   display: flex;
   justify-content: space-between;
+  padding-top: 20px;
+}
+
+.HeaderButton{
+  margin: 0 20px;
+  padding: 0 10px;
+  background-color:rgb(121, 161, 161);
 }
 
 .days-grid {
   display: grid;
-  width: 100%;
-  padding: 50px;
-  margin: 0 auto;
   grid-template-columns: repeat(7, 1fr);
 }
 
 .day {
-  border: 1px solid #ccc;
   padding: 10px;
+  border: 1px solid black;
 }
-.calendarInput{
+
+.selected {
+  background-color:darkgray;
+}
+
+.Add-Task {
+ 
+ font-size: 40px;
+  cursor: pointer;
+  color:rgb(121, 161, 161);
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+
+}
+
+input {
   width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
 }
+
+button {
+  margin: 5px;
+}
+
