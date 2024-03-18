@@ -1,0 +1,35 @@
+POST http://localhost/users/
+Content-Type: application/json
+
+{
+  "email": "{{$random.email}}"
+}
+
+> {%
+    client.global.set("user_id", response.body.id)
+%}
+
+###
+
+GET http://localhost/users/
+
+
+###
+GET http://localhost/users/{{user_id}}
+
+
+###
+POST http://localhost/entries/
+Content-Type: application/json
+
+{
+  "title": "Test1",
+  "description": "Test2",
+  "date": "{{$isoTimestamp}}",
+  "owner_id": {{user_id}}
+}
+
+###
+
+GET http://localhost/entries/{{user_id}}/
+
