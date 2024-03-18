@@ -1,4 +1,6 @@
-POST http://localhost/users/
+@host = localhost:8080
+
+POST http://{{host}}/users/
 Content-Type: application/json
 
 {
@@ -11,15 +13,15 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost/users/
+GET http://{{host}}/users/
 
 
 ###
-GET http://localhost/users/{{user_id}}
+GET http://{{host}}/users/{{user_id}}
 
 
 ###
-POST http://localhost/entries/
+POST http://{{host}}/entries/
 Content-Type: application/json
 
 {
@@ -31,5 +33,5 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost/entries/{{user_id}}/
+GET http://{{host}}/entries/{{user_id}}/
 
