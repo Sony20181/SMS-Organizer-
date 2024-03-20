@@ -5,16 +5,31 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { IoMdAdd } from "react-icons/io";
 import { useState } from 'react';
 import Modal from 'react-modal';
-
-
+import EventForm from './Form';
+import EventInfo from './EventInfo';
+import { TbSquareRoundedChevronDownFilled } from "react-icons/tb";
 Modal.setAppElement('#root');
-/*
+
+
 function App() {  
     
   const [currentDate, setCurrentDate] = useState(new Date());  
-  const [tasks, setTasks] = useState({}); 
   const [selectedDay, setSelectedDay] = useState(new Date().getDate()); 
   const [modalIsOpen, setModalIsOpen] = useState(false); 
+  const [modalIsOpenEventInfo, setModalIsOpenEventInfo] = useState(false); 
+  console.log(new Date())
+  const [formData, setFormData] = useState({});
+ 
+  const handleFormSubmit = (data) => {
+    const day = selectedDay;
+    const key = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day}`; 
+  
+    setFormData(prevData => ({
+      ...prevData,
+      [key]: [...(prevData[key] || []), data],
+    }));
+  };
+  console.log('formData:', formData);
   
   const daysInMonth = (date) => {  
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();  
@@ -22,57 +37,46 @@ function App() {
   
   const handlePrevMonth = () => {  
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));  
+    setSelectedDay("")
   };  
   
   const handleNextMonth = () => {  
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));  
+    setSelectedDay("")
   };  
   const handleSelectDay = (day) => { 
     setSelectedDay(day); 
   }; 
   const openModal = () => { 
-    setModalIsOpen(true); 
+    if (selectedDay) {
+      setModalIsOpen(true);
+    } else {
+      alert("Пожалуйста, выберите дату!");
+    }
   }; 
    
   const closeModal = () => { 
     setModalIsOpen(false); 
   }; 
- const addTask = (day, task) => {   
-    const key = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day}`;   
-    const newTask = { 
-      title: task, 
-      description: '', 
-      startTime: '', 
-      endTime: '' 
-    }; 
-    setTasks(prevTasks => {   
-      return {   
-        ...prevTasks,   
-        [key]: [...(prevTasks[key] || []), newTask]   
-      };   
-    });   
+  const openModalEventInfo = () => { 
+   
+    setModalIsOpenEventInfo(true);
+   
   }; 
-  const deleteTask = (day, index) => {  
-    const key = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day}`;  
-    setTasks(prevTasks => {  
-      return {  
-        ...prevTasks,  
-        [key]: prevTasks[key].filter((_, i) => i !== index)  
-      };  
-    });  
-  };  
-    
-    const saveTask = () => {  
-      const title = document.querySelector('input:nth-of-type(1)').value;  
-      const description = document.querySelector('input:nth-of-type(2)').value;  
-      const startTime = document.querySelector('input:nth-of-type(3)').value;  
-      const endTime = document.querySelector('input:nth-of-type(4)').value;  
-      addTask(selectedDay, { title, description, startTime, endTime });  
-      closeModal();  
-    }; 
-  
-    console.log(tasks) 
+   
+  const closeModalEventInfo = () => { 
+    setModalIsOpenEventInfo(false); 
+  }; 
 
+  //new 
+  const handleEditEvent = (editedEvent) => {
+ /*   setFormData(eventsData.map(event => {
+        if (event.id === editedEvent.id) {
+            return { ...event, ...editedEvent };
+        }
+        return event;
+    }));*/
+};
   
   
     return (  
@@ -89,35 +93,158 @@ function App() {
       isOpen={modalIsOpen} 
       onRequestClose={closeModal} 
     > 
-     <h2>{currentDate.toLocaleString('default', { month: 'long' })} {selectedDay}, {currentDate.getFullYear()}</h2>  
-  <input type="text" placeholder="Введите название задачи" />  
-  <input type="text" placeholder="Введите описание задачи" />  
-  <input type="time" placeholder="Время начала" />  
-  <input type="time" placeholder="Время окончания" />  
-  <button onClick={closeModal}>Закрыть</button>  
-  <button onClick={saveTask}>Сохранить</button>  
+      <h2>{currentDate.toLocaleString('default', { month: 'long' })} {selectedDay}, {currentDate.getFullYear()}</h2>  
+      <EventForm 
+          onFormSubmit={handleFormSubmit} 
+          closeModal= {closeModal} 
+       
+        />
     </Modal> 
+
+    
  
-    <div className="days-grid">  
+     <div className="days-grid">  
       {[...Array(daysInMonth(currentDate)).keys()].map(day => (  
-        <div key={day} className={`day ${day + 1 === selectedDay ? 'selected' : ''} `} onClick={() => handleSelectDay(day + 1)}>  
-          <h3>{day + 1}</h3>  
-          {tasks[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day + 1}`] && tasks[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day + 1}`].map((task, index) => (  
-  <div key={index}>  
-    <span>{task.title}</span>  
-    <AiFillCloseCircle onClick={() => deleteTask(day + 1, index)} />   
-  </div>  
+          <div key={day} className={`day ${day + 1 === selectedDay ? 'selected' : ''} `} onClick={() => handleSelectDay(day + 1)}>  
+            <h3>{day + 1}</h3>  
+            {formData[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day+1}`] && formData[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day+1}`].map((event, index) => (
+  <TbSquareRoundedChevronDownFilled key={index} onClick={() => openModalEventInfo(event)} />
 ))}
-        </div>  
-      ))}  
-   
-    </div>   
+
+          </div>  
+        ))}  
+    </div>
+    <Modal 
+      isOpen={modalIsOpenEventInfo} 
+      onRequestClose={closeModalEventInfo} 
+    > 
+      <h2>{currentDate.toLocaleString('default', { month: 'long' })} {selectedDay}, {currentDate.getFullYear()}</h2>  
+      <EventInfo 
+        onFormSubmit={handleFormSubmit} 
+        closeModal={closeModalEventInfo} 
+        eventData={formData[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${selectedDay}`]}
+        onEdit={handleEditEvent}
+      />
+    </Modal>   
   </div>  
   );  
 }  
   
-export default App;*/
+export default App;
+/*
+function App() {  
+    
+  const [currentDate, setCurrentDate] = useState(new Date());  
+  const [selectedDay, setSelectedDay] = useState(new Date().getDate()); 
+  const [modalIsOpen, setModalIsOpen] = useState(false); 
+  const [modalIsOpenEventInfo, setModalIsOpenEventInfo] = useState(false); 
+  console.log(new Date())
+  const [formData, setFormData] = useState({});
+ 
+  const handleFormSubmit = (data) => {
+    const day = selectedDay
+    const key = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day}`; 
+    setFormData(prevData => ({
+      ...prevData,
+      [key]: data,
+    }));
+  };
+  console.log('formData:', formData);
+  
+  const daysInMonth = (date) => {  
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();  
+  };  
+  
+  const handlePrevMonth = () => {  
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));  
+    setSelectedDay("")
+  };  
+  
+  const handleNextMonth = () => {  
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));  
+    setSelectedDay("")
+  };  
+  const handleSelectDay = (day) => { 
+    setSelectedDay(day); 
+  }; 
+  const openModal = () => { 
+    if (selectedDay) {
+      setModalIsOpen(true);
+    } else {
+      alert("Пожалуйста, выберите дату!");
+    }
+  }; 
+   
+  const closeModal = () => { 
+    setModalIsOpen(false); 
+  }; 
+  const openModalEventInfo = () => { 
+   
+    setModalIsOpenEventInfo(true);
+   
+  }; 
+   
+  const closeModalEventInfo = () => { 
+    setModalIsOpenEventInfo(false); 
+  }; 
 
+  
+  
+  
+    return (  
+    <div className="calendar">  
+  
+    <div className="month-header">  
+      <button onClick={handlePrevMonth}>Назад</button>  
+      <h2>{currentDate.toLocaleString('default', { month: 'long' })} {currentDate.getFullYear()}</h2>  
+      <button onClick={handleNextMonth}>Вперед</button>  
+    </div>  
+  
+    <IoMdAdd className="Add-Task" onClick={openModal} /> 
+    <Modal 
+      isOpen={modalIsOpen} 
+      onRequestClose={closeModal} 
+    > 
+      <h2>{currentDate.toLocaleString('default', { month: 'long' })} {selectedDay}, {currentDate.getFullYear()}</h2>  
+      <EventForm 
+          onFormSubmit={handleFormSubmit} 
+          closeModal= {closeModal} 
+       
+        />
+    </Modal> 
+
+    
+ 
+     <div className="days-grid">  
+      {[...Array(daysInMonth(currentDate)).keys()].map(day => (  
+          <div key={day} className={`day ${day + 1 === selectedDay ? 'selected' : ''} `} onClick={() => handleSelectDay(day + 1)}>  
+            <h3>{day + 1}</h3>  
+            {formData[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day+1}`] && (
+              <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
+            )}
+
+          </div>  
+        ))}  
+    </div>
+    <Modal 
+      isOpen={modalIsOpenEventInfo} 
+      onRequestClose={closeModalEventInfo} 
+    > 
+      <h2>{currentDate.toLocaleString('default', { month: 'long' })} {selectedDay}, {currentDate.getFullYear()}</h2>  
+      <EventInfo 
+        onFormSubmit={handleFormSubmit} 
+        closeModal={closeModalEventInfo} 
+        eventData={formData[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${selectedDay}`]}
+      />
+    </Modal>   
+  </div>  
+  );  
+}  
+  
+export default App;
+*/
+
+/*
 function App() {  
    
   const [currentDate, setCurrentDate] = useState(new Date());  
@@ -220,4 +347,4 @@ function App() {
   );  
 }  
   
-export default App;
+export default App;*/
