@@ -24,20 +24,8 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 */
+
 .calendar {
   display: flex;
   flex-direction: column;
@@ -45,25 +33,33 @@
 }
 
 .month-header {
-  display: flex;
+ display: flex;
   justify-content: space-between;
   padding-top: 20px;
 }
 
 .HeaderButton{
-  margin: 0 20px;
-  padding: 0 10px;
+  margin: 2vh 2vw;
+  padding: 0 4px;
   background-color:rgb(121, 161, 161);
+
 }
 
 .days-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+ 
+  
 }
 
 .day {
-  padding: 10px;
+  padding-bottom: 10px;
+  max-width: 12vw;
+  max-height: 12vh;
+  min-width: 12vw;
+  min-height: 12vh;
   border: 1px solid black;
+  text-align: center;
 }
 
 .selected {
@@ -95,4 +91,5 @@ input {
 button {
   margin: 5px;
 }
+
 
