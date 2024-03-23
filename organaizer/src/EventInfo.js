@@ -137,20 +137,20 @@ function EventInfo({ onFormSubmit,closeModal, eventData}) {
       }
 
     return (
-      <div>
-      <h3>Информация о событии:</h3>
+      <div className="info">
+      <h3 className="info-title">Информация о событии:</h3>
       {formData && formData.map((event, index) => (
-          <div key={index}>
-                    <p><strong>Название события:</strong> {event.eventName}</p>
+          <div key={index} className="info-block-information">
+                    <p className="info-block-information-p"><strong>Название события:</strong> {event.eventName}</p>
                     <p><strong>Описание:</strong> {event.eventDescription}</p>
                     <p><strong>Начало:</strong> {event.eventStartTime}</p>
                     <p><strong>Конец:</strong> {event.eventEndTime}</p>
                     <button onClick={() => handleEdit(event)}>Редактировать</button>
-                    <button type="button" onClick={() => handleDelete(index)}>Удалить</button>
+                    <button type="button" className="info-button-delete" onClick={() => handleDelete(index)}>Удалить</button>
                     </div>
             ))}
-            <button onClick={closeModal}>Закрыть</button>
-            <button  onClick={handleSubmit} >Сохранить</button>
+            <button className="info-button-close" onClick={closeModal}>Закрыть</button>
+            <button className="info-button-save"  onClick={handleSubmit} >Сохранить</button>
         </div>
     );
 
