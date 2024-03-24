@@ -8,6 +8,8 @@ import Modal from 'react-modal';
 import EventForm from './Form';
 import EventInfo from './EventInfo';
 import { TbSquareRoundedChevronDownFilled } from "react-icons/tb";
+import moment from 'moment';
+import 'moment/locale/ru';
 Modal.setAppElement('#root');
 
 function App() {  
@@ -68,10 +70,11 @@ function App() {
     const day = selectedDay;
     const key = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day}`; 
    
-    setEvents(prevData => ({
+   /* setEvents(prevData => ({
       ...prevData,
       [key]: [...(prevData[key] || []), data],
-    }));
+    }));*/
+    setEvents((posts) => [data, ...posts]);
   };
   const updateFormData = (updatedData) => {
     const day = selectedDay;
@@ -84,6 +87,7 @@ function App() {
     const handleSelectDay = (day) => { 
       setSelectedDay(day); 
     }; 
+
   /*не изменять */
   const daysInMonth = (date) => {  
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();  
@@ -143,7 +147,26 @@ const deletePost = async (id) => {
   });
   };*/
  
+  const Events = [    
+    { id: 12, title: '12', description: '2defe', event_date: '2024-03-04', time_start: '12:12:00' },   
+    { id: 13, title: '122', description: '3434', event_date: '2024-03-04', time_start: '12:12:00' }, 
+    { id: 13, title: '122', description: '3434', event_date: '2024-03-04', time_start: '12:12:00' },    
+    { id: 13, title: '122', description: '3434', event_date: '2024-03-24', time_start: '12:12:00' },    
+    { id: 13, title: '122', description: '3434', event_date: '2024-03-24', time_start: '12:12:00' },        
+    { id: 30, title: 'cdscsd', description: 'sd', event_date: '2024-03-24', time_start: '03:23:00' }
+  ];
   
+  // Сортировкае массива объектов по event_date
+  const sortedEvents = Events.sort((a, b) => a.event_date.localeCompare(b.event_date));
+  
+  // Группировка объектов по event_date
+  const EventsByDate = sortedEvents.reduce((prev, curr) => {
+    prev[curr.event_date] = prev[curr.event_date] || [];
+    prev[curr.event_date].push(curr);
+    return prev;
+  }, {});
+  
+  console.log("EventsByDate",EventsByDate, EventsByDate[`${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDay.toString().padStart(2, '0')}`]);
     return (  
     <div className="calendar">  
   
@@ -165,12 +188,14 @@ const deletePost = async (id) => {
           selectedDay = {selectedDay}
         />
     </Modal> 
- 
+   
      <div className="days-grid">  
       {[...Array(daysInMonth(currentDate)).keys()].map(day => (  
           <div key={day} className={`day ${day + 1 === selectedDay ? 'selected' : ''} `} onClick={() => handleSelectDay(day + 1)}>  
-            <h3>{day + 1}</h3>  
-            {/** {events[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day+1}`]?.length > 0 &&
+            <p className="days-names-grid">{moment(currentDate).date(day + 1).format("dd")}</p> 
+            <div className="day-content">
+              <h3>{day + 1}</h3> 
+               {/** {events[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day+1}`]?.length > 0 &&
                 <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
               } 
                {events[events.event_date]?.length > 0 &&
@@ -178,10 +203,15 @@ const deletePost = async (id) => {
               }
               {events[`${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${(day+1).toString().padStart(2, '0')}`]?.length > 0 &&
                 <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
-              }*/}
+              }
                {events.find(item => item.event_date === getFormattedDate(currentDate, day + 1)) && (
-        <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
-      )}
+                   <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
+               )}*/}
+               {EventsByDate[`${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${(day+1).toString().padStart(2, '0')}`]?.length > 0 &&
+                <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
+              }
+            </div>
+        
           </div>  
         ))}  
     </div>
@@ -193,7 +223,7 @@ const deletePost = async (id) => {
         <EventInfo 
           onFormSubmit={updateFormData} 
           closeModal={closeModalEventInfo} 
-          eventData={events[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${selectedDay}`]}
+          eventData={EventsByDate[`${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDay.toString().padStart(2, '0')}`]}
         />
     </Modal>  
    

@@ -30,15 +30,31 @@
 }
 
 .day {
-  padding-bottom: 10px;
-  max-width: 12vw;
-  max-height: 12vh;
-  min-width: 12vw;
-  min-height: 12vh;
+  max-width: 8vw;
+  min-width: 8vw;
+  /* max-width: 8vw;
+   padding-bottom: 8px;
+  max-height: 20%;
+  min-height: 20%;
+  min-width: 8vw;
+  border: 1px solid black;
+  text-align: center;*/
+}
+.days-names-grid{
   border: 1px solid black;
   text-align: center;
+  margin: 0;
+  background-color:rgb(121, 161, 161);
 }
-
+.day-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1vw;
+  border: 1px solid black;
+  text-align: center;
+ 
+}
 .selected {
   background-color:darkgray;
 }
@@ -56,7 +72,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
-
+  
 }
 
 input {
@@ -72,7 +88,7 @@ button {
 /*ИНФОРМАЦИЯ ПРО МЕРОПРИЯТИЯ */
 
 .info {
-  background-color: lightblue;
+  background-color: lavender;
   padding: 20px;
   border-radius: 10px;
   
@@ -93,7 +109,7 @@ button {
 .info-button-delete {
   background-color: #dc3545;
   color: #fff;
-  border: none;
+ 
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
@@ -101,14 +117,14 @@ button {
 
 .info-button-close,
 .info-button-save {
-  background-color: #007bff;
-  background-color:#437bc4;
-  color: #fff;
-  border: none;
+  background-color:rgb(182, 242, 177);
   padding: 8px 15px;
   border-radius: 5px;
   cursor: pointer;
   margin-right: 10px;
+}
+.info-button-close {
+  background-color: rgb(135, 168, 168);
 }
 
 .info-button-close:hover,
@@ -117,7 +133,8 @@ button {
   opacity: 0.8;
 }
 .info-block-information-p{
-  width: 200px;
-  width: 10%;
+  display: "flex";
+  align-items: "center";
+  justify-content: "space-between";
  
 }

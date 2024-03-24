@@ -75,9 +75,9 @@ function EventInfo({ onFormSubmit,closeModal, eventData}) {
         </label>
         <button type="submit">Save</button>
       </form>  */
-  console.log(eventData)
   
-      /*   const [formData, setFormData] = useState(eventData || { eventName: '', eventDescription: '' });
+  
+      const [formData, setFormData] = useState(eventData);
       const [isEditing, setIsEditing] = useState(false);
       const [editedEvent, setEditedEvent] = useState(null);
   
@@ -111,7 +111,7 @@ function EventInfo({ onFormSubmit,closeModal, eventData}) {
                   <h3>Редактирование информации о событии:</h3>
                   <div>
                       <label htmlFor="eventName">Название события:</label>
-                      <input type="text" id="eventName" name="eventName" value={editedEvent.eventName} onChange={handleChange} />
+                      <input type="text" id="eventName" name="eventName" value={editedEvent.title} onChange={handleChange} />
                   </div>
                   <div>
                       <label htmlFor="description">Описание:</label>
@@ -121,7 +121,7 @@ function EventInfo({ onFormSubmit,closeModal, eventData}) {
                     <input
                       type="time"
                       name="eventStartTime"
-                      value={editedEvent.eventStartTime}
+                      value={editedEvent.time_start}
                       onChange={handleChange}
                     />
                   </label>
@@ -129,11 +129,11 @@ function EventInfo({ onFormSubmit,closeModal, eventData}) {
                     <input
                       type="time"
                       name="eventStartTime"
-                      value={editedEvent.eventEndTime}
+                      value={editedEvent.time_end}
                       onChange={handleChange}
                     />
                   </label>
-                  <button onClick={handleSave}>Сохранить</button>
+                  <button  type="button" onClick={handleSave}>Сохранить</button>
               </div>
           );
       }
@@ -143,20 +143,18 @@ function EventInfo({ onFormSubmit,closeModal, eventData}) {
       <h3 className="info-title">Информация о событии:</h3>
       {formData && formData.map((event, index) => (
           <div key={index} className="info-block-information">
-                    <p className="info-block-information-p"><strong>Название события:</strong> {event.eventName}</p>
-                    <p><strong>Описание:</strong> {event.eventDescription}</p>
-                    <p><strong>Начало:</strong> {event.eventStartTime}</p>
-                    <p><strong>Конец:</strong> {event.eventEndTime}</p>
+                    <p className="info-block-information-p"><strong>Название события:</strong> {event.title}</p>
+                    <p><strong>Описание:</strong> {event.description}</p>
+                    <p><strong>Начало:</strong> {event.time_start}</p>
+                    <p><strong>Конец:</strong> {event.time_end}</p>
                     <button onClick={() => handleEdit(event)}>Редактировать</button>
                     <button type="button" className="info-button-delete" onClick={() => handleDelete(index)}>Удалить</button>
                     </div>
             ))}
-            <button className="info-button-close" onClick={closeModal}>Закрыть</button>
-            <button className="info-button-save"  onClick={handleSubmit} >Сохранить</button>
+            <button type="button" className="info-button-close" onClick={closeModal}>Закрыть</button>
+            <button  type="button" className="info-button-save"  onClick={handleSubmit} >Сохранить</button>
         </div>
     );
-
-*/
   };
 
 
