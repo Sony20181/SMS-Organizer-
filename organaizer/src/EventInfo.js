@@ -75,7 +75,9 @@ function EventInfo({ onFormSubmit,closeModal, eventData}) {
         </label>
         <button type="submit">Save</button>
       </form>  */
-      const [formData, setFormData] = useState(eventData || { eventName: '', eventDescription: '' });
+  console.log(eventData)
+  
+      /*   const [formData, setFormData] = useState(eventData || { eventName: '', eventDescription: '' });
       const [isEditing, setIsEditing] = useState(false);
       const [editedEvent, setEditedEvent] = useState(null);
   
@@ -154,7 +156,7 @@ function EventInfo({ onFormSubmit,closeModal, eventData}) {
         </div>
     );
 
-
+*/
   };
 
 

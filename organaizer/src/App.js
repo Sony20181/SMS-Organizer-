@@ -10,42 +10,26 @@ import EventInfo from './EventInfo';
 import { TbSquareRoundedChevronDownFilled } from "react-icons/tb";
 Modal.setAppElement('#root');
 
-
 function App() {  
     
   const [currentDate, setCurrentDate] = useState(new Date());  
   const [selectedDay, setSelectedDay] = useState(new Date().getDate()); 
   const [modalIsOpen, setModalIsOpen] = useState(false); 
   const [modalIsOpenEventInfo, setModalIsOpenEventInfo] = useState(false); 
-  const [events, setEvents] = useState(
-    {});
-    /*
-    const [user, setUsers] = useState(
-      []);
-  useEffect(() => {
-    fetch('http://95.106.139.183:8080/events')
-       .then((response) => response.json())
-       .then((data) => {
-          console.log(data);
-          setUsers(data);
-       })
-       .catch((err) => {
-          console.log(err.message);
-       });
- }, []);*/
- /*const getEvent = async () => {
-  await fetch('http://95.106.139.183:8080/events')
-  .then((response) => response.json())
-       .then((data) => {
-          console.log(data);
-          setUsers(data);
-       })
-       .catch((err) => {
-          console.log(err.message);
-       });
-}; */
-console.log("events", events)
+  const [events, setEvents] = useState([]);
 
+  useEffect(() => {
+      fetch('http://95.106.139.183:8080/events/1?skip=0&limit=100')
+         .then((response) => response.json())
+         .then((data) => {
+            console.log("DATA events",data);
+            setEvents(data);
+         })
+         .catch((err) => {
+            console.log(err.message);
+         });
+   }, []);
+ 
  const addEvent = async (events) => {
   console.log(typeof  events.eventStartTime);
  
@@ -55,7 +39,7 @@ console.log("events", events)
         id: Math.random().toString(36).slice(2),
         title: events.eventName,
         description: events.eventDescription,
-        event_date:`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${selectedDay}`,
+        event_date:`${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDay.toString().padStart(2, '0')}`,
         time_start:events.eventStartTime,
         time_end: events.eventEndTime,
         owner_id: 1
@@ -68,9 +52,11 @@ console.log("events", events)
      .then((response) => response.json())
      .then((data) => {
         console.log("data",data)
-        setEvents((prevEvents) => {
-        return { ...prevEvents, [data.event_date]: [...(prevEvents[data.event_date] || []), data] };
-      });
+        {/**     console.log("datаааааa",data)
+       setEvents((prevEvents) => {
+          return { ...prevEvents, [data.event_date]: [...(prevEvents[data.event_date] || []), data] };
+      }); */}
+     setEvents((posts) => [data, ...posts]);
      })
      .catch((err) => {
         console.log(err.message);
@@ -134,7 +120,28 @@ console.log("events", events)
     setModalIsOpenEventInfo(false); 
   }; 
 
-
+  function getFormattedDate(currentDate, day) {
+    const year = currentDate.getFullYear();
+    const month = ('0' + (currentDate.getMonth() + 1)).slice(-2); 
+    const formattedDay = ('0' + day).slice(-2); 
+    return `${year}-${month}-${formattedDay}`;
+  }
+  /*
+const deletePost = async (id) => {
+  await fetch(`http://95.106.139.183:8080/events/${id}`, {
+     method: 'DELETE',
+  }).then((response) => {
+     if (response.status === 200) {
+        setPosts(
+          setEvents.filter((post) => {
+              return post.id !== id;
+           })
+        );
+     } else {
+        return;
+     }
+  });
+  };*/
  
   
     return (  
@@ -163,12 +170,18 @@ console.log("events", events)
       {[...Array(daysInMonth(currentDate)).keys()].map(day => (  
           <div key={day} className={`day ${day + 1 === selectedDay ? 'selected' : ''} `} onClick={() => handleSelectDay(day + 1)}>  
             <h3>{day + 1}</h3>  
-             {events[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day+1}`]?.length > 0 &&
+            {/** {events[`${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day+1}`]?.length > 0 &&
                 <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
               } 
-            {/**   {events[events.event_date]?.length > 0 &&
+               {events[events.event_date]?.length > 0 &&
+                <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
+              }
+              {events[`${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${(day+1).toString().padStart(2, '0')}`]?.length > 0 &&
                 <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
               }*/}
+               {events.find(item => item.event_date === getFormattedDate(currentDate, day + 1)) && (
+        <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
+      )}
           </div>  
         ))}  
     </div>

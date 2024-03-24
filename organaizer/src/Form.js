@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function EventForm({ onFormSubmit ,closeModal,selectedDay}) {
+function EventForm({ onFormSubmit ,closeModal}) {
     const [eventName, setEventName] = useState('');
     const [eventDescription, setEventDescription] = useState('');
     const [eventStartTime, setEventStartTime] = useState('');
