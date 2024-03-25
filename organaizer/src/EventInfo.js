@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
 
 function EventInfo({deleteEvent,closeModal, eventData}) {
   /*
@@ -76,9 +76,17 @@ function EventInfo({deleteEvent,closeModal, eventData}) {
         deleteEvent(id)
 
       };
-      const onEdit = (event) => {
+    
+      const onEdit = async (event) => {
         console.log("new event",event)
-      }
+      /*  try {
+          await axios.put(`http://95.106.139.183:8080/events/${event.id}`, { event });
+          alert('Data updated successfully!');
+          // Optionally, fetch and update the displayed data
+        } catch (error) {
+          console.error('Error updating data:', error);
+        }*/
+      };
       // для редактироавния события
       const handleEdit = (event) => {
           setEditedEvent(event);
@@ -99,33 +107,38 @@ function EventInfo({deleteEvent,closeModal, eventData}) {
       
       if (isEditing) {
           return (
-              <div>
+              <div style={{ backgroundColor: "lavender", padding: "20px", borderRadius: "10px" }}>
                   <h3>Редактирование информации о событии:</h3>
-                  <div>
-                      <label htmlFor="title">Название события:</label>
-                      <input type="text" id="title" name="title" value={editedEvent.title} onChange={handleChange} />
+                  <div className="info-content-change">
+                      <label  className="info-content-change-label" htmlFor="title">Название события:</label>
+                      <input  className="info-content-change-input" type="text" id="title" name="title" value={editedEvent.title} onChange={handleChange} />
                   </div>
                   <div>
-                      <label htmlFor="description">Описание:</label>
-                      <input type="text" id="description" name="description" value={editedEvent.description} onChange={handleChange} />
+                      <label className="info-content-change-label" htmlFor="description">Описание:</label>
+                      <input className="info-content-change-input" type="text" id="description" name="description" value={editedEvent.description} onChange={handleChange} />
                   </div>
-                  <label htmlFor="time_start">Время начала события:
+                  <label className="info-content-change-label" htmlFor="time_start">Время начала события:
                     <input
                       type="time"
                       name="time_start"
                       value={editedEvent.time_start}
                       onChange={handleChange}
+                      className="info-content-change-input"
                     />
                   </label>
-                  <label htmlFor="time_end">Время окончания события:
+                  <label className="info-content-change-label" htmlFor="time_end">Время окончания события:
                     <input
                       type="time"
                       name="time_end"
                       value={editedEvent.time_end}
                       onChange={handleChange}
+                      className="info-content-change-input"
                     />
                   </label>
-                  <button  type="button" onClick={handleSave}>Сохранить</button>
+                 
+                  <button type="button" onClick={handleSave} style={{ backgroundColor: "rgb(182, 242, 177)", color: "black", padding: "10px", borderRadius: "5px", marginRight: "10px" }}> 
+                    Сохранить 
+                  </button> 
               </div>
           );
       }
@@ -139,7 +152,10 @@ function EventInfo({deleteEvent,closeModal, eventData}) {
                     <p><strong>Описание:</strong> {event.description}</p>
                     <p><strong>Начало:</strong> {event.time_start}</p>
                     <p><strong>Конец:</strong> {event.time_end}</p>
-                    <button onClick={() => handleEdit(event)}>Редактировать</button>
+                   
+                    <button type="button" onClick={() => handleEdit(event)} className="info-button-change"> 
+                    Редактировать 
+        </button> 
                     <button type="button" className="info-button-delete" onClick={() => handleDelete(event.id, index)}>Удалить</button>
                     </div>
             ))}

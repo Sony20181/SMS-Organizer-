@@ -1,13 +1,12 @@
-import logo from './logo.svg';
+
 import './App.css';
-import Organizer from './Organaizer';
-import { AiFillCloseCircle } from "react-icons/ai";
 import { IoMdAdd } from "react-icons/io";
 import { useState,useEffect  } from 'react';
 import Modal from 'react-modal';
 import EventForm from './Form';
 import EventInfo from './EventInfo';
 import { TbSquareRoundedChevronDownFilled } from "react-icons/tb";
+import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/ru';
 Modal.setAppElement('#root');
@@ -78,7 +77,8 @@ function App() {
           return;
       }
     });
-  };
+    };
+   
 
   /*не изменять */
   const handleSelectDay = (day) => { 
@@ -127,16 +127,6 @@ function App() {
   }
   //////////////////////
 
- 
-  const Events = [    
-    { id: 12, title: '12', description: '2defe', event_date: '2024-03-04', time_start: '12:12:00' },   
-    { id: 13, title: '122', description: '3434', event_date: '2024-03-04', time_start: '12:12:00' }, 
-    { id: 13, title: '122', description: '3434', event_date: '2024-03-04', time_start: '12:12:00' },    
-    { id: 13, title: '122', description: '3434', event_date: '2024-03-24', time_start: '12:12:00' },    
-    { id: 13, title: '122', description: '3434', event_date: '2024-03-24', time_start: '12:12:00' },        
-    { id: 30, title: 'cdscsd', description: 'sd', event_date: '2024-03-24', time_start: '03:23:00' }
-  ];
-  
   // Сортировкае массива объектов по event_date
   const sortedEvents = events.sort((a, b) => a.event_date.localeCompare(b.event_date));
   
@@ -148,14 +138,9 @@ function App() {
   }, {});
 
 
-  
-
- 
-  
-  
   return (  
     <div className="calendar">  
-  
+ 
     <div className="month-header">  
       <button onClick={handlePrevMonth} className="HeaderButton">Назад</button>  
       <h2>{currentDate.toLocaleString('default', { month: 'long' })} {currentDate.getFullYear()}</h2>  
@@ -181,14 +166,6 @@ function App() {
             <p className="days-names-grid">{moment(currentDate).date(day + 1).format("dd")}</p> 
             <div className="day-content">
               <h3>{day + 1}</h3> 
-               {/** 
-              {events[`${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${(day+1).toString().padStart(2, '0')}`]?.length > 0 &&
-                <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
-              }
-               
-               {EventsByDate[`${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${(day+1).toString().padStart(2, '0')}`]?.length > 0 &&
-                <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
-              }*/}
               {events.find(item => item.event_date === getFormattedDate(currentDate, day + 1)) && (
                    <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
                )}

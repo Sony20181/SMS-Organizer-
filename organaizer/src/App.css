@@ -106,17 +106,12 @@ button {
   border-radius: 5px;
 }
 
-.info-button-delete {
-  background-color: #dc3545;
-  color: #fff;
- 
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
+
 
 .info-button-close,
-.info-button-save {
+.info-button-save,
+.info-button-change,
+.info-button-delete  {
   background-color:rgb(182, 242, 177);
   padding: 8px 15px;
   border-radius: 5px;
@@ -125,6 +120,12 @@ button {
 }
 .info-button-close {
   background-color: rgb(135, 168, 168);
+}
+.info-button-change{
+  background-color:rgb(242, 242, 242);
+}
+.info-button-delete {
+  background-color: #dc3545;
 }
 
 .info-button-close:hover,
@@ -137,4 +138,24 @@ button {
   align-items: "center";
   justify-content: "space-between";
  
+}
+
+.info-content-change{
+ /* margin-bottom: "10px";
+  width:"90%";
+  display: "flex";
+  align-items: "center";
+  justify-content: "space-between";*/
+}
+.info-content-change-input{
+  border: 2px solid rgb(121, 161, 161);
+  border-radius: 5px;
+  padding: "5px";
+  width:"70%";
+  margin-top: 5px;
+      
+}
+.info-content-change-label{
+ font-weight: bold;
+      
 }
