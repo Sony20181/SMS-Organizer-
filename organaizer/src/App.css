@@ -137,7 +137,7 @@ button {
   display: "flex";
   align-items: "center";
   justify-content: "space-between";
- 
+  word-wrap: break-word;
 }
 
 .info-content-change{

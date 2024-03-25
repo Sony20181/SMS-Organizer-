@@ -149,7 +149,7 @@ function EventInfo({deleteEvent,closeModal, eventData}) {
       {formData && formData.map((event, index) => (
           <div key={index} className="info-block-information">
                     <p className="info-block-information-p"><strong>Название события:</strong> {event.title}</p>
-                    <p><strong>Описание:</strong> {event.description}</p>
+                    <p className="info-block-information-p"><strong>Описание:</strong> {event.description}</p>
                     <p><strong>Начало:</strong> {event.time_start}</p>
                     <p><strong>Конец:</strong> {event.time_end}</p>
                    
