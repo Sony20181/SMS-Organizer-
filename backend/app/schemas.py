@@ -1,34 +1,43 @@
-from datetime import datetime
+from datetime import date, time
 
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
-class EntryBase(BaseModel):
+class Event(BaseModel):
+    id: int
     title: str
     description: str
-    date: datetime
-    owner_id: int
-
-
-class EntryCreate(EntryBase):
-    pass
-
-
-class Entry(EntryBase):
-    id: int
+    event_date: date
+    time_start: time
+    time_end: time
     owner_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
-class UserBase(BaseModel):
-    email: str
+class EventCreate(BaseModel):
+    title: str
+    description: str
+    event_date: date
+    time_start: time
+    time_end: time
+    owner_id: int
 
 
-class User(UserBase):
+class User(BaseModel):
     id: int
-    entries: list[Entry] = []
+    name: str
+    email: EmailStr
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+class UserWithEvents(User):
+    events: list[Event] = []
+
+
+class UserCreate(BaseModel):
+    name: str
+    email: EmailStr

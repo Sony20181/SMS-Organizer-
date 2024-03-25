@@ -1,50 +1,73 @@
-import uvicorn
-from fastapi import Depends, FastAPI, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 
-from . import crud, models, schemas
-from .database import SessionLocal, engine
+from . import models
+from .database import engine
+from .routes.events import eventsRouter
+from .routes.users import usersRouter
 
+import time
+from typing import Callable
+
+from fastapi import APIRouter, FastAPI, Request, Response
+from fastapi.routing import APIRoute
+
+# models.Base.metadata.drop_all(bind=engine)
 models.Base.metadata.create_all(bind=engine)
-app = FastAPI()
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+class TimedRoute(APIRoute):
+    def get_route_handler(self) -> Callable:
+        original_route_handler = super().get_route_handler()
+
+        async def custom_route_handler(request: Request) -> Response:
+            before = time.time()
+            response: Response = await original_route_handler(request)
+            duration = time.time() - before
+            response.headers["X-Response-Time"] = str(duration)
+            print(f"route duration: {duration}")
+            print(f"route response: {response}")
+            print(f"route response headers: {response.headers}")
+            return response
+
+        return custom_route_handler
 
 
-@app.get("/users/", response_model=list[schemas.User])
-def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    users = crud.get_users(db, skip=skip, limit=limit)
-    return users
+tags_metadata = [
+    {
+        "name": "Пользователи",
+        "description": "Операции с пользователями.",
+    },
+    {
+        "name": "События",
+        "description": "Операции с событиями",
+    },
+]
 
+description = """
+## Наше крутое API для приложения "Календарь" позволит вам: 
+* **создавать и получать пользователей** в системе :D
+* **создавать события** 
+"""
 
-@app.get("/users/{user_id}", response_model=schemas.User)
-def read_user(user_id: int, db: Session = Depends(get_db)):
-    db_user = crud.get_user(db, user_id=user_id)
-    if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-    return db_user
+app = FastAPI(debug=True,
+              title="CalendarAPI",
+              summary="API для проекта \"Календарь\"",
+              version="2.2.8",
+              openapi_tags=tags_metadata,
+              description=description,
+              route_class=TimedRoute)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.post("/users/", response_model=schemas.User)
-def create_user(user: schemas.UserBase, db: Session = Depends(get_db)):
-    db_user = crud.get_user_by_email(db, email=user.email)
-    if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    return crud.create_user(db=db, user=user)
+app.add_middleware(GZipMiddleware)
 
-
-@app.get("/entries/{user_id}/", response_model=list[schemas.Entry])
-def read_items(user_id: int, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    items = crud.get_user_entries(db, user_id=user_id, skip=skip, limit=limit)
-    return items
-
-
-@app.post("/entries/", response_model=schemas.Entry)
-def create_item_for_user(item: schemas.EntryCreate, db: Session = Depends(get_db)):
-    return crud.create_user_entry(db=db, item=item)
+app.include_router(usersRouter)
+app.include_router(eventsRouter)
