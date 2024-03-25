@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 
-function EventInfo({ onFormSubmit,closeModal, eventData}) {
+function EventInfo({deleteEvent,closeModal, eventData}) {
   /*
    const [formData, setFormData] = useState(eventData || { eventName: '', eventDescription: '' });
   console.log("formData",formData)
@@ -64,30 +64,29 @@ function EventInfo({ onFormSubmit,closeModal, eventData}) {
   
     );
 */
-/*  <form onSubmit={handleSubmit}>
-        <label>
-          Event Name:
-          <input type="text" name="eventName" value={formData.eventName} onChange={handleInputChange} />
-        </label>
-        <label>
-          Event Description:
-          <textarea name="eventDescription" value={formData.eventDescription} onChange={handleInputChange} />
-        </label>
-        <button type="submit">Save</button>
-      </form>  */
-  
-  
+
+
       const [formData, setFormData] = useState(eventData);
-      const [isEditing, setIsEditing] = useState(false);
-      const [editedEvent, setEditedEvent] = useState(null);
-  
+      const [isEditing, setIsEditing] = useState(false); //  модальное окно для выбранного мероприятия
+      const [editedEvent, setEditedEvent] = useState(null); // выбранное мероприятие
+
+      const handleDelete = (id, index) => {
+        const updatedFormData = formData.filter((event, i) => i !== index);
+        setFormData(updatedFormData);
+        deleteEvent(id)
+
+      };
+      const onEdit = (event) => {
+        console.log("new event",event)
+      }
+      // для редактироавния события
       const handleEdit = (event) => {
           setEditedEvent(event);
           setIsEditing(true);
       };
   
       const handleSave = () => {
-       //   onEdit(editedEvent);
+           onEdit(editedEvent);
           setIsEditing(false);
       };
   
@@ -95,40 +94,33 @@ function EventInfo({ onFormSubmit,closeModal, eventData}) {
           const { name, value } = e.target;
           setEditedEvent({ ...editedEvent, [name]: value });
       };
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        onFormSubmit(formData);
-        closeModal();
-        
-      };
-      const handleDelete = (index) => {
-        const updatedFormData = formData.filter((event, i) => i !== index);
-        setFormData(updatedFormData);
-      };
+      
+
+      
       if (isEditing) {
           return (
               <div>
                   <h3>Редактирование информации о событии:</h3>
                   <div>
-                      <label htmlFor="eventName">Название события:</label>
-                      <input type="text" id="eventName" name="eventName" value={editedEvent.title} onChange={handleChange} />
+                      <label htmlFor="title">Название события:</label>
+                      <input type="text" id="title" name="title" value={editedEvent.title} onChange={handleChange} />
                   </div>
                   <div>
                       <label htmlFor="description">Описание:</label>
                       <input type="text" id="description" name="description" value={editedEvent.description} onChange={handleChange} />
                   </div>
-                  <label htmlFor="eventStartTime">Время начала события:
+                  <label htmlFor="time_start">Время начала события:
                     <input
                       type="time"
-                      name="eventStartTime"
+                      name="time_start"
                       value={editedEvent.time_start}
                       onChange={handleChange}
                     />
                   </label>
-                  <label htmlFor="eventStartTime">Время окончания события:
+                  <label htmlFor="time_end">Время окончания события:
                     <input
                       type="time"
-                      name="eventStartTime"
+                      name="time_end"
                       value={editedEvent.time_end}
                       onChange={handleChange}
                     />
@@ -148,11 +140,11 @@ function EventInfo({ onFormSubmit,closeModal, eventData}) {
                     <p><strong>Начало:</strong> {event.time_start}</p>
                     <p><strong>Конец:</strong> {event.time_end}</p>
                     <button onClick={() => handleEdit(event)}>Редактировать</button>
-                    <button type="button" className="info-button-delete" onClick={() => handleDelete(index)}>Удалить</button>
+                    <button type="button" className="info-button-delete" onClick={() => handleDelete(event.id, index)}>Удалить</button>
                     </div>
             ))}
             <button type="button" className="info-button-close" onClick={closeModal}>Закрыть</button>
-            <button  type="button" className="info-button-save"  onClick={handleSubmit} >Сохранить</button>
+            
         </div>
     );
   };

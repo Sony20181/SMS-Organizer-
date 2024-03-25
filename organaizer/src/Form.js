@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
 function EventForm({ onFormSubmit ,closeModal}) {
+    const [currentDate, setCurrentDate] = useState(new Date());  
+
     const [eventName, setEventName] = useState('');
-    const [eventDescription, setEventDescription] = useState('');
-    const [eventStartTime, setEventStartTime] = useState('');
-    const [eventEndTime, setEventEndTime] = useState('');
+    const [eventDescription, setEventDescription] = useState(' ');
+    const [eventStartTime, setEventStartTime] = useState(`${currentDate.getHours()}:${(currentDate.getMinutes()).toString().padStart(2, '0')}:00`);
+    const [eventEndTime, setEventEndTime] = useState(`${(currentDate.getHours()+1).toString().padStart(2, '0')}:${(currentDate.getMinutes()).toString().padStart(2, '0')}:00`);
     const handleSubmit = (e) => {
         if(eventName){
             e.preventDefault();
