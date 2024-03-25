@@ -2,42 +2,7 @@
   background-color: "#fcdfbd";
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-*/
+/*ГГЛАВНЫЙ ЭКРАН*/
 .calendar {
   display: flex;
   flex-direction: column;
@@ -45,27 +10,51 @@
 }
 
 .month-header {
-  display: flex;
+ display: flex;
   justify-content: space-between;
   padding-top: 20px;
 }
 
 .HeaderButton{
-  margin: 0 20px;
-  padding: 0 10px;
+  margin: 2vh 2vw;
+  padding: 0 4px;
   background-color:rgb(121, 161, 161);
+
 }
 
 .days-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+ 
+  
 }
 
 .day {
-  padding: 10px;
+  max-width: 8vw;
+  min-width: 8vw;
+  /* max-width: 8vw;
+   padding-bottom: 8px;
+  max-height: 20%;
+  min-height: 20%;
+  min-width: 8vw;
   border: 1px solid black;
+  text-align: center;*/
 }
-
+.days-names-grid{
+  border: 1px solid black;
+  text-align: center;
+  margin: 0;
+  background-color:rgb(121, 161, 161);
+}
+.day-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1vw;
+  border: 1px solid black;
+  text-align: center;
+ 
+}
 .selected {
   background-color:darkgray;
 }
@@ -83,7 +72,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
-
+  
 }
 
 input {
@@ -96,3 +85,77 @@ button {
   margin: 5px;
 }
 
+/*ИНФОРМАЦИЯ ПРО МЕРОПРИЯТИЯ */
+
+.info {
+  background-color: lavender;
+  padding: 20px;
+  border-radius: 10px;
+  
+}
+
+.info-title {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+
+.info-block-information {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 3px solid #000;
+  border-radius: 5px;
+}
+
+
+
+.info-button-close,
+.info-button-save,
+.info-button-change,
+.info-button-delete  {
+  background-color:rgb(182, 242, 177);
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.info-button-close {
+  background-color: rgb(135, 168, 168);
+}
+.info-button-change{
+  background-color:rgb(242, 242, 242);
+}
+.info-button-delete {
+  background-color: #dc3545;
+}
+
+.info-button-close:hover,
+.info-button-save:hover,
+.info-button-delete:hover {
+  opacity: 0.8;
+}
+.info-block-information-p{
+  display: "flex";
+  align-items: "center";
+  justify-content: "space-between";
+  word-wrap: break-word;
+}
+
+.info-content-change{
+ /* margin-bottom: "10px";
+  width:"90%";
+  display: "flex";
+  align-items: "center";
+  justify-content: "space-between";*/
+}
+.info-content-change-input{
+  border: 2px solid rgb(121, 161, 161);
+  border-radius: 5px;
+  padding: "5px";
+  width:"70%";
+  margin-top: 5px;
+      
+}
+.info-content-change-label{
+ font-weight: bold;
+      
+}
