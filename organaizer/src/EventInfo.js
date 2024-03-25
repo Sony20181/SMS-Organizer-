@@ -80,7 +80,7 @@ function EventInfo({deleteEvent,closeModal, eventData}) {
       const onEdit = async (event) => {
         console.log("new event",event)
         try {
-          await axios.put(`http://95.106.139.183:8080/events`,  event );
+          await axios.put(`http://localhost:8080/events`,  event );
           alert('Data updated successfully!');
           // Optionally, fetch and update the displayed data
         } catch (error) {
