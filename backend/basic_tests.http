@@ -1,9 +1,10 @@
 @host = localhost:8080
 
-POST http://{{host}}/users/
+POST http://{{host}}/users
 Content-Type: application/json
 
 {
+  "name": "testUser",
   "email": "{{$random.email}}"
 }
 
@@ -13,7 +14,7 @@ Content-Type: application/json
 
 ###
 
-GET http://{{host}}/users/
+GET http://{{host}}/users
 
 
 ###
@@ -21,17 +22,19 @@ GET http://{{host}}/users/{{user_id}}
 
 
 ###
-POST http://{{host}}/entries/
+POST http://{{host}}/events
 Content-Type: application/json
 
 {
   "title": "Test1",
   "description": "Test2",
-  "date": "{{$isoTimestamp}}",
+  "event_date": "2024-03-23",
+  "time_start": "12:25:24.619Z",
+  "time_end": "12:25:24.619Z",
   "owner_id": {{user_id}}
 }
 
 ###
 
-GET http://{{host}}/entries/{{user_id}}/
+GET http://{{host}}/events/{{user_id}}
 
