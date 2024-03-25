@@ -1,6 +1,5 @@
 version: '3.9'
 
-
 services:
   frontend:
     build:
@@ -8,6 +7,8 @@ services:
       target: development
     image: supercalendar/frontend
     container_name: SuperCalendarFrontend
+    depends_on:
+      - backend
     ports:
       - "3000:3000"
     volumes:
@@ -24,26 +25,37 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend/app:/code/app:ro
     environment:
-      - SQLALCHEMY_DATABASE_URL=postgresql://postgres:example@db/calendar
+      - SQLALCHEMY_DATABASE_URL=postgresql://postgres:password@db/calendar
     networks:
       - client-side
       - server-side
 
   db:
-    image: postgres
+    image: postgres:14
     container_name: SuperCalendarDB
     restart: always
+    shm_size: 128mb
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: calendar
     networks:
       - server-side
-    volumes:
-      - ./postgresql/data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+#    volumes:
+#      - ./postgresql/data:/var/lib/postgresql/data
 
 networks:
   client-side: { }
