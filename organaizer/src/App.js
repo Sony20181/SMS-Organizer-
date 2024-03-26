@@ -10,7 +10,6 @@ import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/ru';
 Modal.setAppElement('#root');
-
 function App() {  
     
   const [currentDate, setCurrentDate] = useState(new Date());  
@@ -20,7 +19,7 @@ function App() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-      fetch('http://localhost:8080/events/1?skip=0&limit=100')
+      fetch('http://localhost:8080/events/1')
          .then((response) => response.json())
          .then((data) => {
             console.log("DATA events",data);
@@ -53,10 +52,7 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
           console.log("data",data)
-          {/**     console.log("datаааааa",data)
-        setEvents((prevEvents) => {
-            return { ...prevEvents, [data.event_date]: [...(prevEvents[data.event_date] || []), data] };
-        }); */}
+       
       setEvents((posts) => [data, ...posts]);
       })
       .catch((err) => {
@@ -80,7 +76,7 @@ function App() {
     };
    
 
-  /*не изменять */
+  
   const handleSelectDay = (day) => { 
     setSelectedDay(day); 
   }; 
@@ -97,6 +93,10 @@ function App() {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));  
     setSelectedDay("")
   };  
+  const getFirstDayOfWeek = (date) => {
+    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    return firstDayOfMonth.getDay() === 0 ? 6 : firstDayOfMonth.getDay() - 1;
+  };
   
   const openModalEventForm = () => { 
     if (selectedDay) {
@@ -160,7 +160,7 @@ function App() {
         />
     </Modal> 
    
-     <div className="days-grid">  
+   {/** <div className="days-grid">  
       {[...Array(daysInMonth(currentDate)).keys()].map(day => (  
           <div key={day} className={`day ${day + 1 === selectedDay ? 'selected' : ''} `} onClick={() => handleSelectDay(day + 1)}>  
             <p className="days-names-grid">{moment(currentDate).date(day + 1).format("dd")}</p> 
@@ -173,7 +173,24 @@ function App() {
         
           </div>  
         ))}  
+    </div> */} 
+    <div className="days-grid">
+  {[...Array(getFirstDayOfWeek(currentDate)).keys()].map(() => (
+    <div key={`empty-${Math.random()}`} className="day empty"></div>
+  ))}
+  {[...Array(daysInMonth(currentDate)).keys()].map(day => (
+    <div key={day} className={`day ${day + 1 === selectedDay ? 'selected' : ''} `} onClick={() => handleSelectDay(day + 1)}>  
+      <p className="days-names-grid">{moment(currentDate).date(day + 1).format("dd")}</p>
+      <div className="day-content">
+          <h3>{day + 1}</h3> 
+            {events.find(item => item.event_date === getFormattedDate(currentDate, day + 1)) && (
+                <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
+            )}
+      </div>
     </div>
+   
+  ))}
+</div>
     <Modal  
         isOpen={modalIsOpenEventInfo} 
         onRequestClose={closeModalEventInfo} 
@@ -190,4 +207,62 @@ function App() {
   );  
 }  
   
-export default App;
+export default App; 
+
+/*
+function App() {  
+    
+  const [currentDate, setCurrentDate] = useState(new Date());  
+  const [selectedDay, setSelectedDay] = useState(new Date().getDate()); 
+ 
+  const handleSelectDay = (day) => { 
+    setSelectedDay(day); 
+  }; 
+  const daysInMonth = (date) => {  
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();  
+  };  
+  
+  const handlePrevMonth = () => {  
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));  
+    setSelectedDay("")
+  };  
+  
+  const handleNextMonth = () => {  
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));  
+    setSelectedDay("")
+  };  
+
+  
+
+  return (  
+    <div className="calendar">  
+ 
+    <div className="month-header">  
+      <button onClick={handlePrevMonth} className="HeaderButton">Назад</button>  
+      <h2>{currentDate.toLocaleString('default', { month: 'long' })} {currentDate.getFullYear()}</h2>  
+      <button onClick={handleNextMonth} className="HeaderButton">Вперед</button>  
+    </div>  
+  
+   
+   
+    <div className="days-grid">
+  {[...Array(getFirstDayOfWeek(currentDate)).keys()].map(() => (
+    <div key={`empty-${Math.random()}`} className="day empty"></div>
+  ))}
+  {[...Array(daysInMonth(currentDate)).keys()].map(day => (
+    <div key={day} className={`day ${day + 1 === selectedDay ? 'selected' : ''}`}>
+    <p className="days-names-grid">{moment(currentDate).date(day + 1).format("dd")}</p>
+    <div className="day-content">
+      <h3>{day + 1}</h3>
+    </div>
+    </div>
+   
+  ))}
+</div>
+   
+   
+  </div>  
+  );  
+}  
+  
+export default App;*/
