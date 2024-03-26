@@ -2,69 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function EventInfo({deleteEvent,closeModal, eventData}) {
-  /*
-   const [formData, setFormData] = useState(eventData || { eventName: '', eventDescription: '' });
-  console.log("formData",formData)
-     const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    };
-  
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      onFormSubmit(formData);
-      closeModal();
-      
-    };
-    const handleDelete = (index) => {
-      const updatedFormData = formData.filter((event, i) => i !== index);
-      setFormData(updatedFormData);
-    };
-  
-    return (
-      <div>
-            <h3>Информация:</h3>
-            {formData && formData.map((event, index) => (
-              <form onSubmit={handleSubmit} key={index}>
-                 <label>
-                    Назавние:
-                    <input type="text" name="eventName" value={event.eventName} onChange={handleInputChange} />
-                  </label>
-                  <label>
-                    Описание:
-                    <textarea name="eventDescription" value={event.eventDescription} onChange={handleInputChange} />
-                  </label>
-                  <label htmlFor="eventStartTime">Время начала события:
-                    <input
-                      type="time"
-                      name="eventStartTime"
-                      value={event.eventStartTime}
-                      onChange={handleInputChange}
-                    />
-                  </label>
-                  <label htmlFor="eventStartTime">Время окончания события:
-                    <input
-                      type="time"
-                      name="eventStartTime"
-                      value={event.eventEndTime}
-                      onChange={handleInputChange}
-                    />
-                  </label>
-          
-                
-                  <button type="button" onClick={() => handleDelete(index)}>Удалить</button>
-              </form> 
-            ))}
-            <button onClick={closeModal}>Закрыть</button>
-            <button  onClick={handleSubmit} >Сохранить</button>
-        </div>
-  
-    );
-*/
-
 
       const [formData, setFormData] = useState(eventData);
       const [isEditing, setIsEditing] = useState(false); //  модальное окно для выбранного мероприятия
@@ -76,13 +13,20 @@ function EventInfo({deleteEvent,closeModal, eventData}) {
         deleteEvent(id)
 
       };
-    
+      
+      formData.sort((a, b) => {
+        const time_start_a = a.time_start || '';
+        const time_start_b = b.time_start || '';
+        return time_start_a.localeCompare(time_start_b);
+      });
+   
+
       const onEdit = async (event) => {
         console.log("new event",event)
         try {
           await axios.put(`http://localhost:8080/events`,  event );
           alert('Data updated successfully!');
-          // Optionally, fetch and update the displayed data
+         
         } catch (error) {
           console.error('Error updating data:', error);
         }
@@ -159,8 +103,8 @@ function EventInfo({deleteEvent,closeModal, eventData}) {
                     <button type="button" className="info-button-delete" onClick={() => handleDelete(event.id, index)}>Удалить</button>
                     </div>
             ))}
-            <button type="button" className="info-button-close" onClick={closeModal}>Закрыть</button>
-            
+        <button type="button" className="info-button-close" onClick={closeModal}>Закрыть</button>
+     
         </div>
     );
   };

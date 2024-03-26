@@ -126,10 +126,15 @@ function App() {
     return `${year}-${month}-${formattedDay}`;
   }
   //////////////////////
+  const Events = [    
+    {id: 12, title: '12', description: '2defe', event_date: '2024-03-04', time_start: '22:11:00'},   
+    {id: 13, title: '122', description: '3434', event_date: '2024-03-04', time_start: '22:11:00'},     
+    {id: 30, title: 'cdscsd', description: 'sd', event_date: '2024-03-04', time_start: '11:59:00'},
+    {id: 30, title: 'cdscsd', description: 'sd', event_date: '2024-03-04', time_start: '10:23:00'},
+    {id: 30, title: 'cdscsd', description: 'sd', event_date: '2024-03-04', time_start: '09:43:00'}] 
 
   // Сортировкае массива объектов по event_date
   const sortedEvents = events.sort((a, b) => a.event_date.localeCompare(b.event_date));
-  
   // Группировка объектов по event_date
   const EventsByDate = sortedEvents.reduce((prev, curr) => {
     prev[curr.event_date] = prev[curr.event_date] || [];
