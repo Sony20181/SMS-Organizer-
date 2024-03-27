@@ -43,7 +43,7 @@ const ModalErrorTimeInterval = ({ isOpen, onClose,old_event,oldStartTime, oldEnd
   );
 };
 
-function EventForm({ onFormSubmit ,closeModal,events}) {
+function EventForm({ onFormSubmit ,closeModal,events,selectedDay}) {
     const [currentDate, setCurrentDate] = useState(new Date());  
    
     const [eventName, setEventName] = useState('');
@@ -69,14 +69,17 @@ function EventForm({ onFormSubmit ,closeModal,events}) {
     const closeModalErrorTimeInterval = () => {
       setModalErrorTimeInterval(false);
     };
-    const handleAddEvent = (name, time_start, time_end) => {
+    const handleAddEvent = (name, time_start, time_end,selectedDay) => {
       let hasOverlap = false;
+      console.log("selectedDay",selectedDay )
       events.forEach(event => {
           if (
-            time_start <= event.time_end &&
-            time_end >= event.time_start
+            event.event_date === selectedDay &&
+            time_start < event.time_end &&
+            time_end > event.time_start
               
           ) {
+           
               hasOverlap = true;
               setOld_event(event.title);
               setOldStartTime(event.time_start);
@@ -104,7 +107,7 @@ function EventForm({ onFormSubmit ,closeModal,events}) {
         });
       }else{
         fieldsValid.eventName = true;
-        const ок = handleAddEvent(eventName,eventStartTime, eventEndTime)
+        const ок = handleAddEvent(eventName,eventStartTime, eventEndTime,selectedDay)
         if (eventStartTime >= eventEndTime) {
           setModalErrorTime(true)
          }

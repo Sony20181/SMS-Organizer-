@@ -20,8 +20,7 @@ function App() {
 
   useEffect(() => {
  
-    //fetch('http://localhost:8080/events')
-      fetch('http://95.106.139.183:8080/events')
+      fetch('http://localhost:8080/events')
          .then((response) => response.json())
          .then((data) => {
             console.log("DATA events",data);
@@ -33,7 +32,7 @@ function App() {
    }, []);
  
   const addEvent = async (events) => {
-    await fetch('http://95.106.139.183:8080/events', {
+    await fetch('http://localhost:8080/events', {
       method: 'POST',
       body: JSON.stringify({
           id: Math.random().toString(36).slice(2),
@@ -60,7 +59,7 @@ function App() {
       });
   };
   const deleteEvent = async (id) => {
-    await fetch(`http://95.106.139.183:8080/events/${id}`, {
+    await fetch(`http://localhost:8080/events/${id}`, {
       method: 'DELETE',
     }).then((response) => {
       if (response.status === 200) {
@@ -161,25 +160,11 @@ function App() {
       <EventForm 
           onFormSubmit={addEvent} 
           closeModal= {closeModalEventForm} 
-          selectedDay = {selectedDay}
+          selectedDay = {`${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDay.toString().padStart(2, '0')}`}
           events = {events}
         />
     </Modal> 
-   
-   {/** <div className="days-grid">  
-      {[...Array(daysInMonth(currentDate)).keys()].map(day => (  
-          <div key={day} className={`day ${day + 1 === selectedDay ? 'selected' : ''} `} onClick={() => handleSelectDay(day + 1)}>  
-            <p className="days-names-grid">{moment(currentDate).date(day + 1).format("dd")}</p> 
-            <div className="day-content">
-              <h3>{day + 1}</h3> 
-              {events.find(item => item.event_date === getFormattedDate(currentDate, day + 1)) && (
-                   <TbSquareRoundedChevronDownFilled onClick={() => openModalEventInfo()} />
-               )}
-            </div>
-        
-          </div>  
-        ))}  
-    </div> */} 
+
     <div className="days-grid">
   {[...Array(getFirstDayOfWeek(currentDate)).keys()].map(() => (
     <div key={`empty-${Math.random()}`} className="day empty"></div>

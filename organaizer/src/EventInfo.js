@@ -24,7 +24,7 @@ function EventInfo({deleteEvent,closeModal, eventData}) {
      // для редактирования
       const onEdit = async (updatedEvent) => {
         try {
-          await axios.put(`http://95.106.139.183:8080/events`,  updatedEvent );
+          await axios.put(`http://localhost:8080/events`,  updatedEvent );
           const updatedEvents = formData.map((event) =>
             event.id === updatedEvent.id ? updatedEvent : event
           );
