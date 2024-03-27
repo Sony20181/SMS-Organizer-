@@ -1,5 +1,26 @@
 import React, { useState } from 'react';
 import { FaStarOfLife } from "react-icons/fa";
+import Modal from 'react-modal';
+
+const ModalErrorTime = ({ isOpen, onClose }) => {
+  if (!isOpen) {
+    return null;
+  }
+
+  const closeModal = () => {
+    onClose();
+  };
+
+  return (
+    <div className="modalErrorTime">
+      <div className="modalErrorTime-content">
+        <p>Время начала события должно быть раньше времени окончания!</p>
+        <button className="modalErrorTime-button" onClick={closeModal}>Закрыть</button>
+      </div>
+    </div>
+  );
+};
+
 function EventForm({ onFormSubmit ,closeModal}) {
     const [currentDate, setCurrentDate] = useState(new Date());  
 
@@ -12,6 +33,12 @@ function EventForm({ onFormSubmit ,closeModal}) {
       eventStartTime: true,
       eventEndTime: true,
     });
+    const [modalErrorTime, setModalErrorTime] = useState(false);
+
+    const closeModalErrorTime = () => {
+      setModalErrorTime(false);
+    };
+
     const handleSubmit = () => {
       if (eventName.trim() === '' || eventStartTime.trim() === '' || eventEndTime.trim() === '' ) {
         setFieldsValid({
@@ -20,6 +47,9 @@ function EventForm({ onFormSubmit ,closeModal}) {
           eventEndTime: eventEndTime.trim() !== '',
         });
         
+      }else if (eventStartTime >= eventEndTime) {
+       // alert('Время начала события должно быть раньше времени окончания!')
+       setModalErrorTime(true)
       }else{
         onFormSubmit({ eventName,eventDescription,eventStartTime,eventEndTime});
         closeModal();
@@ -37,7 +67,9 @@ function EventForm({ onFormSubmit ,closeModal}) {
 
 
   return (
+    
     <form onSubmit={handleSubmit} style={{ backgroundColor: "lavender", padding: "20px", borderRadius: "10px" }}>
+      <ModalErrorTime isOpen={modalErrorTime} onClose={closeModalErrorTime} />
         <div style={{ marginBottom: "10px", width:"90%",display: "flex",alignItems: "center",justifyContent: "space-between" }}> 
           <label htmlFor="eventName" style={{ fontWeight: "bold" }}>Название события <FaStarOfLife  style={{ color:"red", width:"3%" }}/> :</label> 
           <input 
@@ -59,7 +91,7 @@ function EventForm({ onFormSubmit ,closeModal}) {
           /> 
         </div> 
         <div style={{ marginBottom: "10px", width:"90%",display: "flex",alignItems: "center",justifyContent: "space-between"  }}> 
-          <label htmlFor="eventStartTime" style={{ fontWeight: "bold" }}>Время начала события <FaStarOfLife  style={{ color:"red", width:"3%" }}/> :</label> 
+          <label htmlFor="eventStartTime" style={{ fontWeight: "bold" }}>Время начала <FaStarOfLife  style={{ color:"red", width:"3%" }}/> :</label> 
           <input 
             type="time" 
             id="eventStartTime" 
@@ -69,7 +101,7 @@ function EventForm({ onFormSubmit ,closeModal}) {
           /> 
         </div> 
         <div style={{ marginBottom: "10px" , width:"90%",display: "flex",alignItems: "center",justifyContent: "space-between" }}> 
-          <label htmlFor="eventEndTime" style={{ fontWeight: "bold" }}>Время окончания события <FaStarOfLife  style={{ color:"red", width:"3%" }}/> :</label> 
+          <label htmlFor="eventEndTime" style={{ fontWeight: "bold" }}>Время окончания <FaStarOfLife  style={{ color:"red", width:"3%" }}/> :</label> 
           <input 
             type="time" 
             id="eventEndTime" 
@@ -78,9 +110,6 @@ function EventForm({ onFormSubmit ,closeModal}) {
             style={{ border: "2px solid rgb(121, 161, 161)",borderColor: fieldsValid.eventEndTime  ? "rgb(121, 161, 161)" : 'red', borderRadius: "5px", padding: "5px", width:"70%" , marginLeft:"10px"}}
           /> 
         </div> 
-       {/** <button type="button" onClick={handleSubmit}  style={{ backgroundColor: "rgb(182, 242, 177)", color: "black", padding: "10px", borderRadius: "5px", marginRight: "10px" }}> 
-          Сохранить 
-        </button>  */}
         <button type="button" onClick={handleSubmit} style={{ backgroundColor: "rgb(182, 242, 177)", color: "black", padding: "10px", borderRadius: "5px", marginRight: "10px" }}>
         Сохранить
       </button>

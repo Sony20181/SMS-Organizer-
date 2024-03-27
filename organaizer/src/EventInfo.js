@@ -6,7 +6,8 @@ function EventInfo({deleteEvent,closeModal, eventData}) {
       const [formData, setFormData] = useState(eventData);
       const [isEditing, setIsEditing] = useState(false); //  модальное окно для выбранного мероприятия
       const [editedEvent, setEditedEvent] = useState(null); // выбранное мероприятие
-
+     
+      // для удаления
       const handleDelete = (id, index) => {
         const updatedFormData = formData.filter((event, i) => i !== index);
         setFormData(updatedFormData);
@@ -19,33 +20,37 @@ function EventInfo({deleteEvent,closeModal, eventData}) {
         const time_start_b = b.time_start || '';
         return time_start_a.localeCompare(time_start_b);
       });
-   
-
-      const onEdit = async (event) => {
-        console.log("new event",event)
+    
+     // для редактирования
+      const onEdit = async (updatedEvent) => {
         try {
-          await axios.put(`http://localhost:8080/events`,  event );
-          alert('Data updated successfully!');
+          await axios.put(`http://95.106.139.183:8080/events`,  updatedEvent );
+          const updatedEvents = formData.map((event) =>
+            event.id === updatedEvent.id ? updatedEvent : event
+          );
+          setFormData(updatedEvents);
          
         } catch (error) {
           console.error('Error updating data:', error);
+          
         }
       };
-      // для редактироавния события
+
       const handleEdit = (event) => {
           setEditedEvent(event);
           setIsEditing(true);
       };
   
+      const handleChange = (e) => {
+        const { name, value } = e.target;
+        setEditedEvent({ ...editedEvent, [name]: value });
+    };
+    // сохранить изменения
       const handleSave = () => {
-           onEdit(editedEvent);
+          onEdit(editedEvent);
           setIsEditing(false);
       };
   
-      const handleChange = (e) => {
-          const { name, value } = e.target;
-          setEditedEvent({ ...editedEvent, [name]: value });
-      };
       
 
       
