@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { FaStarOfLife } from "react-icons/fa";
-import Modal from 'react-modal';
 
 const ModalErrorTime = ({ isOpen, onClose }) => {
   if (!isOpen) {
@@ -14,18 +13,41 @@ const ModalErrorTime = ({ isOpen, onClose }) => {
   return (
     <div className="modalErrorTime">
       <div className="modalErrorTime-content">
-        <p>Время начала события должно быть раньше времени окончания!</p>
+        <p>Время начала мероприятия должно быть раньше времени окончания!</p>
+        <button className="modalErrorTime-button" onClick={closeModal}>Закрыть</button>
+      </div>
+    </div>
+  );
+};
+const ModalErrorTimeInterval = ({ isOpen, onClose,old_event,oldStartTime, oldEndTime,new_event,eventStartTime,eventEndTime }) => {
+  if (!isOpen) {
+    return null;
+  }
+
+  const closeModal = () => {
+    onClose();
+  };
+
+  return (
+    <div className="modalErrorTime">
+      <div className="modalErrorTime-content">
+        <p>Время ваших мероприятий пересекается:</p>
+        <p><strong>Название:</strong> {old_event}</p>
+        <p><strong>Время:</strong>{` ${oldStartTime} - ${oldEndTime} `}</p>
+        <p><strong>Название:</strong>  {new_event}</p>
+        <p><strong>Время:</strong>{` ${eventStartTime} - ${eventEndTime} `}</p>
+        <p>Пожалуйста,выберите другое время.</p>
         <button className="modalErrorTime-button" onClick={closeModal}>Закрыть</button>
       </div>
     </div>
   );
 };
 
-function EventForm({ onFormSubmit ,closeModal}) {
+function EventForm({ onFormSubmit ,closeModal,events}) {
     const [currentDate, setCurrentDate] = useState(new Date());  
-
+   
     const [eventName, setEventName] = useState('');
-    const [eventDescription, setEventDescription] = useState(' ');
+    const [eventDescription, setEventDescription] = useState('');
     const [eventStartTime, setEventStartTime] = useState(`${currentDate.getHours()}:${(currentDate.getMinutes()).toString().padStart(2, '0')}:00`);
     const [eventEndTime, setEventEndTime] = useState(`${(currentDate.getHours()+1).toString().padStart(2, '0')}:${(currentDate.getMinutes()).toString().padStart(2, '0')}:00`);
     const [fieldsValid, setFieldsValid] = useState({
@@ -34,42 +56,83 @@ function EventForm({ onFormSubmit ,closeModal}) {
       eventEndTime: true,
     });
     const [modalErrorTime, setModalErrorTime] = useState(false);
-
+    const [modalErrorTimeInterval, setModalErrorTimeInterval] = useState(false);
+    const [old_event, setOld_event] = useState("");
+    const [new_event, setNew_event] = useState(null);
+    const [oldStartTime, setOldStartTime] = useState("");
+    const [oldEndTime, setOldEndTime] = useState("");
+    
+    
     const closeModalErrorTime = () => {
       setModalErrorTime(false);
     };
+    const closeModalErrorTimeInterval = () => {
+      setModalErrorTimeInterval(false);
+    };
+    const handleAddEvent = (name, time_start, time_end) => {
+      let hasOverlap = false;
+      events.forEach(event => {
+          if (
+            time_start <= event.time_end &&
+            time_end >= event.time_start
+              
+          ) {
+              hasOverlap = true;
+              setOld_event(event.title);
+              setOldStartTime(event.time_start);
+              setOldEndTime(event.time_end);
+              if(name){setNew_event(name);}
+              else{setNew_event("Новое мероприятие");}
+          }
+      });
 
+      if (hasOverlap) {
+          setModalErrorTimeInterval(true)
+      } 
+      else{
+        setModalErrorTimeInterval(false);
+        return true
+      }
+  };
     const handleSubmit = () => {
+      
       if (eventName.trim() === '' || eventStartTime.trim() === '' || eventEndTime.trim() === '' ) {
         setFieldsValid({
           eventName: eventName.trim() !== '',
           eventStartTime: eventStartTime.trim() !== '',
           eventEndTime: eventEndTime.trim() !== '',
         });
-        
-      }else if (eventStartTime >= eventEndTime) {
-       // alert('Время начала события должно быть раньше времени окончания!')
-       setModalErrorTime(true)
       }else{
-        onFormSubmit({ eventName,eventDescription,eventStartTime,eventEndTime});
-        closeModal();
-      }
+        fieldsValid.eventName = true;
+        const ок = handleAddEvent(eventName,eventStartTime, eventEndTime)
+        if (eventStartTime >= eventEndTime) {
+          setModalErrorTime(true)
+         }
+      else if (ок){
+          onFormSubmit({ eventName,eventDescription,eventStartTime,eventEndTime});
+          closeModal();
+        }
+      }  
+     
       
     };
 
-   /* const handleSubmit = (e) => {
-        if(eventName){
-            e.preventDefault();
-            onFormSubmit({ eventName,eventDescription,eventStartTime,eventEndTime});
-            closeModal();
-        }else alert("Пожалуйста, добавте событие на текущий день!");
-      };*/
-
+  
 
   return (
     
     <form onSubmit={handleSubmit} style={{ backgroundColor: "lavender", padding: "20px", borderRadius: "10px" }}>
       <ModalErrorTime isOpen={modalErrorTime} onClose={closeModalErrorTime} />
+      <ModalErrorTimeInterval 
+        isOpen={modalErrorTimeInterval} 
+        old_event = {old_event} 
+        oldStartTime = {oldStartTime}
+        oldEndTime = {oldEndTime}
+        new_event = {new_event} 
+        eventStartTime = {eventStartTime}
+        eventEndTime = {eventEndTime}
+        onClose={closeModalErrorTimeInterval} 
+      />
         <div style={{ marginBottom: "10px", width:"90%",display: "flex",alignItems: "center",justifyContent: "space-between" }}> 
           <label htmlFor="eventName" style={{ fontWeight: "bold" }}>Название события <FaStarOfLife  style={{ color:"red", width:"3%" }}/> :</label> 
           <input 

@@ -162,6 +162,7 @@ function App() {
           onFormSubmit={addEvent} 
           closeModal= {closeModalEventForm} 
           selectedDay = {selectedDay}
+          events = {events}
         />
     </Modal> 
    
