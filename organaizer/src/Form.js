@@ -33,7 +33,7 @@ function EventForm({ onFormSubmit ,closeModal,events,selectedDay}) {
     };
     const handleAddEvent = (name, time_start, time_end,selectedDay) => {
       let hasOverlap = false;
-      setError(false);
+      
       console.log("time_start",time_start)
       events.forEach(event => {
           if (

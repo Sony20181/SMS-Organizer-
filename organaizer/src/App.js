@@ -19,13 +19,14 @@ function App() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-      fetch('http://82.140.216.9:8080/events')
+      fetch('http://80.246.94.23:8080/events')
          .then((response) => response.json())
          .then((data) => {
             console.log("DATA events",data);
             setEvents(data);
          })
          .catch((err) => {
+          alert("ERROR")
             console.log(err.message);
          });
    }, []);
