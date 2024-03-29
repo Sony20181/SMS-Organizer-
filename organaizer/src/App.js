@@ -19,8 +19,7 @@ function App() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
- 
-      fetch('http://localhost:8080/events')
+      fetch('http://82.140.216.9:8080/events')
          .then((response) => response.json())
          .then((data) => {
             console.log("DATA events",data);
@@ -32,7 +31,7 @@ function App() {
    }, []);
  
   const addEvent = async (events) => {
-    await fetch('http://localhost:8080/events', {
+    await fetch('http://82.140.216.9:8080/events', {
       method: 'POST',
       body: JSON.stringify({
           id: Math.random().toString(36).slice(2),
@@ -59,7 +58,7 @@ function App() {
       });
   };
   const deleteEvent = async (id) => {
-    await fetch(`http://localhost:8080/events/${id}`, {
+    await fetch(`http://82.140.216.9:8080/events/${id}`, {
       method: 'DELETE',
     }).then((response) => {
       if (response.status === 200) {
@@ -191,6 +190,7 @@ function App() {
           deleteEvent = {deleteEvent}
           closeModal={closeModalEventInfo} 
           eventData={EventsByDate[`${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDay.toString().padStart(2, '0')}`]}
+          selectedDay = {selectedDay}
         />
     </Modal>  
    
