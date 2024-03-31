@@ -197,7 +197,7 @@ function EventInfo({deleteEvent,closeModal, eventData, selectedDay,address}) {
                       style={{ borderColor: errorEndTime ?  'red' : "rgb(121, 161, 161)" }}
                     />
                   </label>
-                  <label className="info-content-change-label" htmlFor="event_date">Дата<FaStarOfLife  style={{ color:"red", width:"1%" }}/>:
+              {/**   <label className="info-content-change-label" htmlFor="event_date">Дата<FaStarOfLife  style={{ color:"red", width:"1%" }}/>:
                     <input
                       type="date"
                       name="event_date"
@@ -206,7 +206,7 @@ function EventInfo({deleteEvent,closeModal, eventData, selectedDay,address}) {
                       className="info-content-change-input"
                       style={{ borderColor: errorEndTime ?  'red' : "rgb(121, 161, 161)" }}
                     />
-                  </label>
+                  </label> */} 
                  
                   <button type="button" onClick={handleSave} style={{ backgroundColor: "rgb(182, 242, 177)", color: "black", padding: "10px", borderRadius: "5px", marginRight: "10px" }}> 
                     Сохранить 
