@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { FaStarOfLife } from "react-icons/fa";
 import { ModalErrorTime } from './ModalErrorTime';
 import { ModalErrorTimeInterval } from './ModalErrorTimeInterval';
-
 
 function EventForm({ onFormSubmit ,closeModal,events,selectedDay}) {
     const [currentDate, setCurrentDate] = useState(new Date());  
@@ -33,16 +32,18 @@ function EventForm({ onFormSubmit ,closeModal,events,selectedDay}) {
     };
     const handleAddEvent = (name, time_start, time_end,selectedDay) => {
       let hasOverlap = false;
-      
-      console.log("time_start",time_start)
       events.forEach(event => {
+        let timeString = event.time_end
+        let parts = timeString.split(":");
+        let hours = parts[0];
+        let minutes = parts[1];
+        let time = hours + ":"+ minutes
           if (
             event.event_date === selectedDay &&
-            time_start < event.time_end &&
-            time_end > event.time_start
+            time_start < time &&
+            time_end >= event.time_start
               
           ) {
-           
               hasOverlap = true;
               setOld_event(event.title);
               setOldStartTime(event.time_start);
@@ -70,7 +71,7 @@ function EventForm({ onFormSubmit ,closeModal,events,selectedDay}) {
         setError(true);
         
       }else{
-        fieldsValid.eventName = true;
+        //fieldsValid.eventName = true;
         
         const ок = handleAddEvent(eventName,eventStartTime, eventEndTime,selectedDay)
         if (eventStartTime >= eventEndTime) {
@@ -86,8 +87,21 @@ function EventForm({ onFormSubmit ,closeModal,events,selectedDay}) {
      
       
     };
+    useEffect(() => {
+      if (eventName.trim() === ''){fieldsValid.eventName = true;}
+      if (  eventName.trim() === '' && eventStartTime.trim() === '' && eventEndTime.trim() === '' ){
+        
+        setError(false);
+      }
+     /* if (!eventName.trim() === ''){fieldsValid.eventName = true;}
+      if (fieldsValid.eventStartTime){fieldsValid.eventStartTime = true;}
+      if (fieldsValid.eventEndTime){fieldsValid.eventEndTime = true;}*/
+      
+     // fieldsValid.eventStartTime = true;
+     // fieldsValid.eventEndTime = true;
+   });
 
-  
+
 
   return (
     
@@ -98,7 +112,7 @@ function EventForm({ onFormSubmit ,closeModal,events,selectedDay}) {
         old_event = {old_event} 
         oldStartTime = {oldStartTime}
         oldEndTime = {oldEndTime}
-        new_event = {new_event} 
+        new_event = {eventName} 
         eventStartTime = {eventStartTime}
         eventEndTime = {eventEndTime}
         onClose={closeModalErrorTimeInterval} 

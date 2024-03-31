@@ -1,6 +1,41 @@
 /*.App {
   background-color: "#fcdfbd";
+}*/
+
+/*ВЫБОР МЕСЯЦА*/
+.month-selector {
+  
+  margin-top: 20px;
+  margin-right: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: #333;
 }
+
+.input-year {
+  width: 80px;
+  margin-left: 10px;
+  padding: 5px;
+  border: 2px solid rgb(121, 161, 161);
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: #333;
+}
+.input-month{
+  width: 110px;
+  padding: 5px;
+  border: 2px solid rgb(121, 161, 161);
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: #333;
+}
+.select-month:hover,
+.input-year:hover,
+.input-month {
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
+}
+
 
 /*ГГЛАВНЫЙ ЭКРАН*/
 .calendar {
@@ -182,7 +217,7 @@ button {
 .modalErrorTime-button {
   padding: 10px 20px;
   background: #007bff;
-  color: #9a9595;
+  color: black;
   border: none;
   border-radius: 5px;
   cursor: pointer;

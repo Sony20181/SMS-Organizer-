@@ -4,7 +4,7 @@ import { FaStarOfLife } from "react-icons/fa";
 import { ModalErrorTime } from './ModalErrorTime';
 import { ModalErrorTimeInterval } from './ModalErrorTimeInterval';
 
-function EventInfo({deleteEvent,closeModal, eventData, selectedDay}) {
+function EventInfo({deleteEvent,closeModal, eventData, selectedDay,address}) {
 
       const [formData, setFormData] = useState(eventData);
       const [isEditing, setIsEditing] = useState(false); //  модальное окно для выбранного мероприятия
@@ -46,16 +46,22 @@ function EventInfo({deleteEvent,closeModal, eventData, selectedDay}) {
      // для редактирования
       const onEdit = async (updatedEvent) => {
         let hasOverlap = false;
-       if (updatedEvent.title && updatedEvent.time_start && updatedEvent.time_end ){
+       if (updatedEvent.title.trim() && updatedEvent.time_start.trim() && updatedEvent.time_end.trim() ){
         if (updatedEvent.time_start >= updatedEvent.time_end) {
              setModalErrorTime(true)
          }
          else{
           formData.forEach(event => {
+            let timeString = event.time_end
+            let parts = timeString.split(":");
+            let hours = parts[0];
+            let minutes = parts[1];
+            let time = hours + ":"+ minutes
             if (
-              event.event_date === selectedDay &&
-              updatedEvent.time_start < event.time_end &&
-              updatedEvent.time_end > event.time_start
+              updatedEvent.id != event.id &&
+              selectedDay === event.event_date &&
+              updatedEvent.time_start < time &&
+              updatedEvent.time_end >= event.time_start
                 
             ) {
                 hasOverlap = true;
@@ -75,9 +81,16 @@ function EventInfo({deleteEvent,closeModal, eventData, selectedDay}) {
           else{
             //setModalErrorTimeInterval(false);
             try {
-              await axios.put(`http://82.140.216.9:8080/events`,  updatedEvent );
-              const updatedEvents = formData.map((event) =>
-                event.id === updatedEvent.id ? updatedEvent : event
+              await axios.put(`http://${address}:8080/events`,  updatedEvent );
+              
+              const updatedEvents = formData.map((event) =>{
+               /* if(event.)
+                console.log(updatedEvent)*/
+                return event.id === updatedEvent.id ? updatedEvent : event
+                
+              }
+              
+               
               );
               
               setFormData(updatedEvents);
@@ -115,7 +128,11 @@ function EventInfo({deleteEvent,closeModal, eventData, selectedDay}) {
   
       const handleChange = (e) => {
         const { name, value } = e.target;
-        setEditedEvent({ ...editedEvent, [name]: value });
+        if (name == "time_start" || name == "time_end"){
+          setEditedEvent({ ...editedEvent, [name]: `${value}`});
+        }
+        else{setEditedEvent({ ...editedEvent, [name]: value });}
+        
        if (name == "title") { setErrorTitle(false)}
        if (name == "time_start") { setErrorStrartTime(false)}
        if (name == "time_end") { setErrorEndTime(false)}
@@ -128,6 +145,9 @@ function EventInfo({deleteEvent,closeModal, eventData, selectedDay}) {
           onEdit(editedEvent);
           //setIsEditing(false);
       };
+      const handleCloseEditing = () => {
+        setIsEditing(false);
+    };
   
       
 
@@ -177,9 +197,22 @@ function EventInfo({deleteEvent,closeModal, eventData, selectedDay}) {
                       style={{ borderColor: errorEndTime ?  'red' : "rgb(121, 161, 161)" }}
                     />
                   </label>
+                  <label className="info-content-change-label" htmlFor="event_date">Дата<FaStarOfLife  style={{ color:"red", width:"1%" }}/>:
+                    <input
+                      type="date"
+                      name="event_date"
+                      value={editedEvent.event_date}
+                      onChange={handleChange}
+                      className="info-content-change-input"
+                      style={{ borderColor: errorEndTime ?  'red' : "rgb(121, 161, 161)" }}
+                    />
+                  </label>
                  
                   <button type="button" onClick={handleSave} style={{ backgroundColor: "rgb(182, 242, 177)", color: "black", padding: "10px", borderRadius: "5px", marginRight: "10px" }}> 
                     Сохранить 
+                  </button> 
+                  <button type="button" onClick={handleCloseEditing} style={{ backgroundColor: "rgb(182, 242, 177)", color: "black", padding: "10px", borderRadius: "5px", marginRight: "10px" }}> 
+                    Закрыть 
                   </button> 
               </div>
           );
