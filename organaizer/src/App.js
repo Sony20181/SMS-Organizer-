@@ -17,7 +17,7 @@ function App() {
  
 
   const address = "82.140.216.9"
-  //const adreess = "localhost"
+ // const address = "localhost"
   const [currentDate, setCurrentDate] = useState(new Date());  
   const [selectedDay, setSelectedDay] = useState(new Date().getDate()); 
   const [modalIsOpen, setModalIsOpen] = useState(false); 
@@ -35,7 +35,7 @@ function App() {
       fetch(`http://${address}:8080/events`)
          .then((response) => response.json())
          .then((data) => {
-            console.log("DATA events",data);
+           
             setEvents(data);
          })
          .catch((err) => {
@@ -64,7 +64,7 @@ function App() {
     })
       .then((response) => response.json())
       .then((data) => {
-          console.log("data",data)
+        
        
       setEvents((posts) => [data, ...posts]);
       })
@@ -97,20 +97,32 @@ function App() {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();  
   };  
   
+  const getLastDayOfMonth = (year, month) => {
+    return new Date(year, month + 1, 0).getDate();
+  };
   const handlePrevMonth = () => {  
-  //  setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));  
-  //  setSelectedDay("")
-   const prevMonth = currentDate.getMonth() - 1;
-  let newYear = selectedYear;
+ 
+  const prevMonth = currentDate.getMonth() - 1;
+  let newYear = currentDate.getFullYear();
   let newMonth = prevMonth;
+
   if (prevMonth < 0) {
     newYear -= 1;
-    newMonth = 11; // December
+    newMonth = 11; 
+
+    if (newYear < 1900) {
+      setSelectedMonth(0)
+      setSelectedYear(1900)
+      setCurrentDate(new Date(1900, 0));
+      return;
+    }
   }
-  setCurrentDate(new Date(newYear, newMonth));  
-  setSelectedDay("");
-  setSelectedMonth(newMonth);
-  setSelectedYear(newYear);
+  const lastDayOfMonth = getLastDayOfMonth(newYear, newMonth);
+  const newDay = Math.min(selectedDay, lastDayOfMonth);
+  setSelectedDay(newDay); 
+  setSelectedMonth(newMonth)
+  setSelectedYear(newYear)
+  setCurrentDate(new Date(newYear, newMonth));
   };  
   
   
@@ -118,16 +130,25 @@ function App() {
    // setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));  
    // setSelectedDay("")
    const nextMonth = currentDate.getMonth() + 1;
-   let newYear = selectedYear;
+   let newYear = currentDate.getFullYear();
    let newMonth = nextMonth;
    if (nextMonth > 11) {
      newYear += 1;
-     newMonth = 0; // January
+     newMonth = 0; 
+     
+    if (newYear > 9999) {
+      setSelectedMonth(11)
+      setSelectedYear(9999)
+      setCurrentDate(new Date(9999, 11));
+      return;
+    }
    }
-   setCurrentDate(new Date(newYear, newMonth));  
-   setSelectedDay("");
-   setSelectedMonth(newMonth);
-   setSelectedYear(newYear);
+   const lastDayOfMonth = getLastDayOfMonth(newYear, newMonth);
+   const newDay = Math.min(selectedDay, lastDayOfMonth);
+   setSelectedDay(newDay); 
+   setSelectedMonth(newMonth)
+   setSelectedYear(newYear)
+   setCurrentDate(new Date(newYear, newMonth));
 
   };  
   const getFirstDayOfWeek = (date) => {
@@ -177,12 +198,15 @@ function App() {
     setSelectedMonth(month);
     setSelectedYear(year);
   };
+  const handleYearChange = (value) => {
+    setSelectedYear(value);
+  };
 
   return (  
     <div className="calendar">  
-  <div className="month-selector">
+      <div className="month-selector">
         <select
-        className="input-month"
+          className="input-month"
           value={selectedMonth}
           onChange={(e) => handleSelectMonthYear(parseInt(e.target.value), selectedYear)}
         >
@@ -190,42 +214,39 @@ function App() {
             <option key={index} value={index}>{month}</option>
           ))}
         </select>
-        <input 
-  className="input-year" 
-  type="number" 
-  value={selectedYear} 
-   onChange={(e) => {
-    let newValue = e.target.value === "" ? "" : parseInt(e.target.value);
-   
-    if (newValue <= 9999) {
-   
-      handleSelectMonthYear(selectedMonth, newValue);
-    } 
-  }}
- 
-  
-  onKeyPress={(e) => { 
-    if (e.key === 'Enter') { 
-      const enteredYear = parseInt(e.target.value); 
-      if (enteredYear < 1900) { 
-        handleSelectMonthYear(selectedMonth, 1900); 
-      } 
-    } 
-  }} 
-  style={{ width: "50px", textAlign: "center" }}
-/>
+        <input
+          className="input-year"
+          type="number"
+          value={selectedYear}
+          onChange={(e) => {
+            let value = e.target.value ? parseInt(e.target.value) : ""; 
+            if ( value && value.toString().length > 4) {
+              value = parseInt(value.toString().slice(0, 4));
+              
+            }
+            
+            handleYearChange(value);
+          }}
+          onKeyUp={(e) => {
+            
+            if (e.key === 'Enter') {
+              if (selectedYear == ""){
+                setCurrentDate(new Date(selectedYear == "" ? new Date().getFullYear() : selectedYear, selectedMonth));
+                return
+              }
+              setCurrentDate(new Date(selectedYear < 1900 ? new Date().getFullYear()  : selectedYear, selectedMonth));
+            }
+          }}
+        />
+       
+      
       </div>
-      <div className="month-header">
-      <button onClick={handlePrevMonth} className="HeaderButton">Назад</button> 
-        <h2>{moment(currentDate).format('MMMM YYYY')}</h2>
-        <button onClick={handleNextMonth} className="HeaderButton">Вперед</button>  
-      </div>
-   {/**  <div className="month-header">  
-      <button onClick={handlePrevMonth} className="HeaderButton">Назад</button>  
-      <h2>{currentDate.toLocaleString('default', { month: 'long' })} {currentDate.getFullYear()}</h2>  
-      <button onClick={handleNextMonth} className="HeaderButton">Вперед</button>  
-    </div>  */}
-  
+      <div className="month-header">  
+          <button onClick={handlePrevMonth} className="HeaderButton">Назад</button>  
+          <h2>{moment(currentDate).format('MMMM YYYY')}</h2>
+          <button onClick={handleNextMonth} className="HeaderButton">Вперед</button>  
+        </div>
+   
     <IoMdAdd className="Add-Task" onClick={openModalEventForm} /> 
     <ModalErrorDataBase isOpen={modalErrorDataBase} onClose={closeModalErrorDataBase} />
     <Modal 

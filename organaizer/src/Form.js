@@ -87,19 +87,7 @@ function EventForm({ onFormSubmit ,closeModal,events,selectedDay}) {
      
       
     };
-    useEffect(() => {
-      if (eventName.trim() === ''){fieldsValid.eventName = true;}
-      if (  eventName.trim() === '' && eventStartTime.trim() === '' && eventEndTime.trim() === '' ){
-        
-        setError(false);
-      }
-     /* if (!eventName.trim() === ''){fieldsValid.eventName = true;}
-      if (fieldsValid.eventStartTime){fieldsValid.eventStartTime = true;}
-      if (fieldsValid.eventEndTime){fieldsValid.eventEndTime = true;}*/
-      
-     // fieldsValid.eventStartTime = true;
-     // fieldsValid.eventEndTime = true;
-   });
+
 
 
 
@@ -145,6 +133,7 @@ function EventForm({ onFormSubmit ,closeModal,events,selectedDay}) {
             id="eventStartTime" 
             value={eventStartTime} 
             onChange={(e) => setEventStartTime(e.target.value)} 
+            step="1"
             style={{ border: "2px solid rgb(121, 161, 161)",borderColor: fieldsValid.eventStartTime   ? "rgb(121, 161, 161)" : 'red', borderRadius: "5px", padding: "5px", width:"70%", marginLeft:"10px" }}
           /> 
         </div> 
@@ -155,6 +144,7 @@ function EventForm({ onFormSubmit ,closeModal,events,selectedDay}) {
             id="eventEndTime" 
             value={eventEndTime} 
             onChange={(e) => setEventEndTime(e.target.value)} 
+            step="1"
             style={{ border: "2px solid rgb(121, 161, 161)",borderColor: fieldsValid.eventEndTime  ? "rgb(121, 161, 161)" : 'red', borderRadius: "5px", padding: "5px", width:"70%" , marginLeft:"10px"}}
           /> 
         </div> 

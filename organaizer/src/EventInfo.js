@@ -136,7 +136,8 @@ function EventInfo({deleteEvent,closeModal, eventData, selectedDay,address}) {
        if (name == "title") { setErrorTitle(false)}
        if (name == "time_start") { setErrorStrartTime(false)}
        if (name == "time_end") { setErrorEndTime(false)}
-       setError(false);
+       if (name != "description" && name.trim() == ""){setError(false);}
+       
         
         
     };
@@ -185,6 +186,7 @@ function EventInfo({deleteEvent,closeModal, eventData, selectedDay,address}) {
                       onChange={handleChange}
                       className="info-content-change-input"
                       style={{  borderColor: errorStrartTime ?  'red' : "rgb(121, 161, 161)"  }}
+                      step="1"
                     />
                   </label>
                   <label className="info-content-change-label" htmlFor="time_end">Время окончания события<FaStarOfLife  style={{ color:"red", width:"1%" }}/>:
@@ -195,6 +197,7 @@ function EventInfo({deleteEvent,closeModal, eventData, selectedDay,address}) {
                       onChange={handleChange}
                       className="info-content-change-input"
                       style={{ borderColor: errorEndTime ?  'red' : "rgb(121, 161, 161)" }}
+                      step="1"
                     />
                   </label>
               {/**   <label className="info-content-change-label" htmlFor="event_date">Дата<FaStarOfLife  style={{ color:"red", width:"1%" }}/>:

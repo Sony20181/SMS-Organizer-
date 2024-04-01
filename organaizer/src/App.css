@@ -4,31 +4,26 @@
 
 /*ВЫБОР МЕСЯЦА*/
 .month-selector {
-  
+  display: flex;
+  justify-content: center;
   margin-top: 20px;
   margin-right: 10px;
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   color: #333;
+
+}
+.input-month,
+.input-year {
+  width: 110px; /* Устанавливаем одинаковую ширину для input и select */
+  padding: 5px; /* Добавляем отступы вокруг содержимого */
+  margin: 0 5px; /* Добавляем небольшие отступы между элементами */
+  border: 2px solid rgb(121, 161, 161);
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: #333;
 }
 
-.input-year {
-  width: 80px;
-  margin-left: 10px;
-  padding: 5px;
-  border: 2px solid rgb(121, 161, 161);
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  color: #333;
-}
-.input-month{
-  width: 110px;
-  padding: 5px;
-  border: 2px solid rgb(121, 161, 161);
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  color: #333;
-}
 .select-month:hover,
 .input-year:hover,
 .input-month {
@@ -45,14 +40,17 @@
 }
 
 .month-header {
- display: flex;
+  display: flex;
   justify-content: space-between;
-  padding-top: 20px;
+  width: 42%;
+  margin-top: 20px;
+
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: #333;
 }
 
 .HeaderButton{
-  margin: 2vh 2vw;
-  padding: 0 4px;
   background-color:rgb(121, 161, 161);
 
 }
@@ -175,13 +173,7 @@ button {
   word-wrap: break-word;
 }
 
-.info-content-change{
- /* margin-bottom: "10px";
-  width:"90%";
-  display: "flex";
-  align-items: "center";
-  justify-content: "space-between";*/
-}
+
 .info-content-change-input{
   border: 2px solid rgb(121, 161, 161);
   border-radius: 5px;
@@ -208,13 +200,18 @@ button {
 }
 
 .modalErrorTime-content {
+  display: flex;
+  align-items: center;
   background: #fff;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-
+.modalErrorTime-content p {
+font-size: 18px;
+}
 .modalErrorTime-button {
+  margin-left: 10px;
   padding: 10px 20px;
   background: #007bff;
   color: black;
