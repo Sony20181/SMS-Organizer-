@@ -1,6 +1,36 @@
 /*.App {
   background-color: "#fcdfbd";
+}*/
+
+/*ВЫБОР МЕСЯЦА*/
+.month-selector {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-right: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: #333;
+
 }
+.input-month,
+.input-year {
+  width: 110px; /* Устанавливаем одинаковую ширину для input и select */
+  padding: 5px; /* Добавляем отступы вокруг содержимого */
+  margin: 0 5px; /* Добавляем небольшие отступы между элементами */
+  border: 2px solid rgb(121, 161, 161);
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: #333;
+}
+
+.select-month:hover,
+.input-year:hover,
+.input-month {
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
+}
+
 
 /*ГГЛАВНЫЙ ЭКРАН*/
 .calendar {
@@ -10,14 +40,17 @@
 }
 
 .month-header {
- display: flex;
+  display: flex;
   justify-content: space-between;
-  padding-top: 20px;
+  width: 42%;
+  margin-top: 20px;
+
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: #333;
 }
 
 .HeaderButton{
-  margin: 2vh 2vw;
-  padding: 0 4px;
   background-color:rgb(121, 161, 161);
 
 }
@@ -140,13 +173,7 @@ button {
   word-wrap: break-word;
 }
 
-.info-content-change{
- /* margin-bottom: "10px";
-  width:"90%";
-  display: "flex";
-  align-items: "center";
-  justify-content: "space-between";*/
-}
+
 .info-content-change-input{
   border: 2px solid rgb(121, 161, 161);
   border-radius: 5px;
@@ -158,4 +185,41 @@ button {
 .info-content-change-label{
  font-weight: bold;
       
+}
+
+.modalErrorTime {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalErrorTime-content {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.modalErrorTime-content p {
+font-size: 18px;
+}
+.modalErrorTime-button {
+  margin-left: 10px;
+  padding: 10px 20px;
+  background: #007bff;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modalErrorTime-button:hover {
+  background: #0056b3;
 }
