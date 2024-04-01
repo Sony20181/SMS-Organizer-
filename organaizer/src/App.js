@@ -16,8 +16,8 @@ Modal.setAppElement('#root');
 function App() {  
  
 
-  const address = "82.140.216.9"
- // const address = "localhost"
+  // const address = "82.140.216.9"
+  const address = "localhost"
   const [currentDate, setCurrentDate] = useState(new Date());  
   const [selectedDay, setSelectedDay] = useState(new Date().getDate()); 
   const [modalIsOpen, setModalIsOpen] = useState(false); 
